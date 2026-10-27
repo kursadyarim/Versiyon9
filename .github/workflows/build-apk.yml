@@ -1,0 +1,28 @@
+name: Ahmet Zikirmatik APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dosyalari indir
+        uses: actions/checkout@v4
+
+      - name: Web dosyalarini hazirla
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+          cp manifest.webmanifest dist/
+          cp sw.js dist/
+          cp -r icons dist/
+
+      - name: APK olustur
+        uses: cemcoe/web-to-apk-action@v1
+        with:
+          app_name: "Ahmet Zikirmatik"
+          app_id: "com.ahmet.zikirmatik"
+          build_command: "mkdir -p dist"
+          web_dir: "dist"
