@@ -1,0 +1,17 @@
+{
+  "id": "./index.html",
+  "name": "Ahmet Zikirmatik",
+  "short_name": "Zikirmatik",
+  "description": "Zikir sayacı, Esmaül Hüsna sıfırlama, imame durakları, günlük hedef ve istatistikler.",
+  "lang": "tr-TR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#061a19",
+  "theme_color": "#07211f",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

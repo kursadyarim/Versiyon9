@@ -1,0 +1,1602 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#07211f">
+<meta name="description" content="Kişisel zikir sayacı, imame durakları, günlük hedefler ve istatistikler.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Zikirmatik</title>
+<style>
+/* ===== Varsayılan tema: Zümrüt Gece (v1'deki görünüm aynen korunur) ===== */
+:root{
+  --bg1:#061a19; --bg2:#0f3d38;
+  --bgImage:radial-gradient(120% 90% at 50% 0%,#0f3d38,#061a19 70%);
+  --gold:#e9c46a; --gold2:#c9973a; --onGold:#2b2108;
+  --ivory:#f6efd6; --teal:#2a9d8f; --muted:#8fc2b8;
+  --card:rgba(255,255,255,.07); --card2:rgba(255,255,255,.10); --press:rgba(255,255,255,.14);
+  --line:rgba(233,196,106,.25); --lineSoft:rgba(233,196,106,.18); --lineFaint:rgba(233,196,106,.10);
+  --bead:#2c6b64; --beadLine:rgba(255,255,255,.12); --beadOn:#f6efd6; --beadOnLine:rgba(255,255,255,.7);
+  --imame:#7a5e1a; --imameLine:rgba(233,196,106,.7); --imameOn:#e9c46a; --imameOnLine:#fff3c4;
+  --end:#6b4f12; --endLine:#e9c46a; --endOn:#f4a261;
+  --btn1:#26867c; --btn2:#0e3f39; --btnLine:rgba(233,196,106,.55); --btnText:#f6efd6;
+  --btnGlow:rgba(42,157,143,.35); --btnShadow:rgba(0,0,0,.45); --btnInset:rgba(233,196,106,.12); --btnInset2:rgba(233,196,106,.25);
+  --cntGlow:rgba(233,196,106,.45);
+  --glowA:rgba(42,157,143,.35); --glowB:rgba(233,196,106,.10);
+  --navBg:rgba(4,18,17,.88); --dlgBg:#0d2f2b; --toastBg:rgba(10,40,36,.96);
+  --inputBg:rgba(0,0,0,.3); --swOff:rgba(255,255,255,.15); --swKnob:#fff;
+  --testBg:rgba(42,157,143,.35); --mainAct1:rgba(42,157,143,.55); --mainAct2:rgba(42,157,143,.25);
+  --danger:#ff9d9d; --dangerLine:rgba(255,110,110,.4); --overlay:rgba(0,0,0,.6);
+  --fx1:#e9c46a; --fx2:#f6efd6; --fx3:#2a9d8f; --fx4:#f4a261; --star:#f6efd6;
+  --size:max(230px,min(88vw,calc(100dvh - 352px),430px));
+}
+/* ===== Ay Işığı: serin bir yaz akşamı ===== */
+:root[data-theme="ay"]{
+  --bg1:#070e22; --bg2:#14305a;
+  --bgImage:radial-gradient(70% 40% at 88% 4%,rgba(196,215,255,.20),transparent 62%),linear-gradient(180deg,#070f26 0%,#0c1f45 50%,#123a63 100%);
+  --gold:#bcd4ff; --gold2:#7ea4e6; --onGold:#07142e;
+  --ivory:#eaf2ff; --teal:#4fc3d9; --muted:#93add4;
+  --card:rgba(180,205,255,.08); --card2:rgba(180,205,255,.12); --press:rgba(180,205,255,.18);
+  --line:rgba(188,212,255,.28); --lineSoft:rgba(188,212,255,.20); --lineFaint:rgba(188,212,255,.10);
+  --bead:#2c4a7e; --beadLine:rgba(200,220,255,.15); --beadOn:#eaf2ff; --beadOnLine:rgba(255,255,255,.75);
+  --imame:#6f6230; --imameLine:rgba(255,226,140,.75); --imameOn:#ffe08a; --imameOnLine:#fff6cf;
+  --end:#5c4a24; --endLine:#ffe08a; --endOn:#ffb86b;
+  --btn1:#2f6aa8; --btn2:#0f2a55; --btnLine:rgba(188,212,255,.6); --btnText:#eaf2ff;
+  --btnGlow:rgba(79,195,217,.35); --btnShadow:rgba(0,0,0,.5); --btnInset:rgba(188,212,255,.14); --btnInset2:rgba(188,212,255,.28);
+  --cntGlow:rgba(188,212,255,.5);
+  --glowA:rgba(79,195,217,.30); --glowB:rgba(188,212,255,.14);
+  --navBg:rgba(6,14,34,.88); --dlgBg:#0e2347; --toastBg:rgba(10,26,58,.96);
+  --inputBg:rgba(0,0,20,.35); --swOff:rgba(200,220,255,.18);
+  --testBg:rgba(79,195,217,.30); --mainAct1:rgba(79,195,217,.50); --mainAct2:rgba(79,195,217,.22);
+  --fx1:#bcd4ff; --fx2:#eaf2ff; --fx3:#4fc3d9; --fx4:#ffe08a; --star:#eaf2ff;
+}
+/* ===== Gün Batımı ===== */
+:root[data-theme="gunbatimi"]{
+  --bg1:#1a0a1c; --bg2:#4a1a2e;
+  --bgImage:radial-gradient(100% 55% at 50% 108%,rgba(255,140,60,.50),transparent 65%),linear-gradient(180deg,#1b0b22 0%,#3d1531 52%,#6b2630 100%);
+  --gold:#ffb86b; --gold2:#e9692f; --onGold:#2a0d05;
+  --ivory:#fff0e2; --teal:#e8647f; --muted:#e0aaa5;
+  --card:rgba(255,220,200,.08); --card2:rgba(255,220,200,.12); --press:rgba(255,220,200,.18);
+  --line:rgba(255,184,107,.30); --lineSoft:rgba(255,184,107,.22); --lineFaint:rgba(255,184,107,.11);
+  --bead:#7a3446; --beadLine:rgba(255,220,200,.15); --beadOn:#fff0e2; --beadOnLine:rgba(255,255,255,.7);
+  --imame:#8a4a1a; --imameLine:rgba(255,184,107,.75); --imameOn:#ffb86b; --imameOnLine:#ffe3c2;
+  --end:#7a3a12; --endLine:#ffb86b; --endOn:#ff7a45;
+  --btn1:#b2455a; --btn2:#4e1730; --btnLine:rgba(255,184,107,.6); --btnText:#fff0e2;
+  --btnGlow:rgba(232,100,127,.4); --btnShadow:rgba(0,0,0,.45); --btnInset:rgba(255,184,107,.14); --btnInset2:rgba(255,184,107,.28);
+  --cntGlow:rgba(255,184,107,.5);
+  --glowA:rgba(232,100,127,.35); --glowB:rgba(255,184,107,.14);
+  --navBg:rgba(26,10,28,.9); --dlgBg:#3a1530; --toastBg:rgba(50,16,36,.96);
+  --inputBg:rgba(20,0,10,.35); --swOff:rgba(255,220,200,.18);
+  --testBg:rgba(232,100,127,.32); --mainAct1:rgba(232,100,127,.50); --mainAct2:rgba(232,100,127,.22);
+  --fx1:#ffb86b; --fx2:#fff0e2; --fx3:#e8647f; --fx4:#ff7a45; --star:#ffe3c2;
+}
+/* ===== Sabah Işığı (açık tema) ===== */
+:root[data-theme="sabah"]{
+  --bg1:#f3e9cf; --bg2:#fff8e4;
+  --bgImage:radial-gradient(75% 45% at 12% 0%,rgba(255,206,110,.55),transparent 65%),linear-gradient(180deg,#fff8e6 0%,#f5ebd0 100%);
+  --gold:#9a6a10; --gold2:#74500b; --onGold:#fffaf0;
+  --ivory:#2b291d; --teal:#1f8a7c; --muted:#6b6850;
+  --card:rgba(90,70,20,.07); --card2:rgba(90,70,20,.10); --press:rgba(90,70,20,.16);
+  --line:rgba(140,100,20,.32); --lineSoft:rgba(140,100,20,.22); --lineFaint:rgba(140,100,20,.12);
+  --bead:#d8c9a0; --beadLine:rgba(90,70,20,.25); --beadOn:#1f7a6d; --beadOnLine:rgba(0,0,0,.35);
+  --imame:#e6c981; --imameLine:#9a6a10; --imameOn:#c9731a; --imameOnLine:#6e3f08;
+  --end:#e1b866; --endLine:#74500b; --endOn:#b5452b;
+  --btn1:#fffaf0; --btn2:#eadbb0; --btnLine:rgba(154,106,16,.6); --btnText:#2b291d;
+  --btnGlow:rgba(31,138,124,.25); --btnShadow:rgba(90,70,20,.30); --btnInset:rgba(154,106,16,.10); --btnInset2:rgba(154,106,16,.22);
+  --cntGlow:rgba(255,255,255,0);
+  --glowA:rgba(31,138,124,.18); --glowB:rgba(255,196,90,.30);
+  --navBg:rgba(255,249,232,.94); --dlgBg:#fffaf0; --toastBg:rgba(255,250,238,.98);
+  --inputBg:rgba(255,255,255,.75); --swOff:rgba(90,70,20,.25);
+  --testBg:rgba(31,138,124,.18); --mainAct1:rgba(31,138,124,.30); --mainAct2:rgba(31,138,124,.14);
+  --danger:#b3261e; --dangerLine:rgba(179,38,30,.45); --overlay:rgba(40,30,10,.45);
+  --fx1:#e0a020; --fx2:#1f8a7c; --fx3:#c9731a; --fx4:#b5452b; --star:#c9a24a;
+}
+:root[data-theme="sabah"] #stars i{display:none}
+/* ===== Pastel temalar (açık renkli) ===== */
+:root[data-theme="pembe"]{
+  --bg1:#fbdfe9; --bg2:#fff5f8;
+  --bgImage:radial-gradient(75% 45% at 12% 0%,rgba(255,200,220,.7),transparent 65%),linear-gradient(180deg,#fff5f8 0%,#fbdfe9 100%);
+  --gold:#b04a73; --gold2:#8a3355; --onGold:#fffafc;
+  --ivory:#3a2230; --teal:#d0668f; --muted:#8a6577;
+  --card:rgba(176,74,115,.07); --card2:rgba(176,74,115,.10); --press:rgba(176,74,115,.16);
+  --line:rgba(176,74,115,.30); --lineSoft:rgba(176,74,115,.22); --lineFaint:rgba(176,74,115,.12);
+  --bead:#f1c6d6; --beadLine:rgba(176,74,115,.28); --beadOn:#c2467a; --beadOnLine:rgba(0,0,0,.25);
+  --imame:#f4b6a0; --imameLine:#b04a73; --imameOn:#e07a3c; --imameOnLine:#7a3a10;
+  --end:#e8a0b8; --endLine:#8a3355; --endOn:#c0392b;
+  --btn1:#fffafc; --btn2:#f6cddb; --btnLine:rgba(176,74,115,.55); --btnText:#3a2230;
+  --btnGlow:rgba(176,74,115,.22); --btnShadow:rgba(176,74,115,.28); --btnInset:rgba(176,74,115,.10); --btnInset2:rgba(176,74,115,.22);
+  --cntGlow:rgba(255,255,255,0);
+  --glowA:rgba(176,74,115,.16); --glowB:rgba(255,200,220,.40);
+  --navBg:rgba(255,243,247,.94); --dlgBg:#fff8fa; --toastBg:rgba(255,243,247,.98);
+  --inputBg:rgba(255,255,255,.75); --swOff:rgba(176,74,115,.25);
+  --testBg:rgba(176,74,115,.18); --mainAct1:rgba(176,74,115,.30); --mainAct2:rgba(176,74,115,.14);
+  --danger:#b3261e; --dangerLine:rgba(179,38,30,.45); --overlay:rgba(50,35,55,.40);
+  --fx1:#e0709a; --fx2:#f4a6c0; --fx3:#c2467a; --fx4:#e8894a; --star:#f4a6c0;
+}
+:root[data-theme="nane"]{
+  --bg1:#d9f2e5; --bg2:#f2fcf7;
+  --bgImage:radial-gradient(75% 45% at 12% 0%,rgba(190,240,215,.7),transparent 65%),linear-gradient(180deg,#f2fcf7 0%,#d9f2e5 100%);
+  --gold:#2f8a6b; --gold2:#1f6850; --onGold:#fffafc;
+  --ivory:#1f3a30; --teal:#3aa585; --muted:#5f8374;
+  --card:rgba(47,138,107,.07); --card2:rgba(47,138,107,.10); --press:rgba(47,138,107,.16);
+  --line:rgba(47,138,107,.30); --lineSoft:rgba(47,138,107,.22); --lineFaint:rgba(47,138,107,.12);
+  --bead:#bfe6d2; --beadLine:rgba(47,138,107,.28); --beadOn:#2a9470; --beadOnLine:rgba(0,0,0,.25);
+  --imame:#f2dc9a; --imameLine:#2f8a6b; --imameOn:#d99a2b; --imameOnLine:#6e4a08;
+  --end:#e3c46f; --endLine:#1f6850; --endOn:#c2602b;
+  --btn1:#fbfffd; --btn2:#c8ecd9; --btnLine:rgba(47,138,107,.55); --btnText:#1f3a30;
+  --btnGlow:rgba(47,138,107,.22); --btnShadow:rgba(47,138,107,.28); --btnInset:rgba(47,138,107,.10); --btnInset2:rgba(47,138,107,.22);
+  --cntGlow:rgba(255,255,255,0);
+  --glowA:rgba(47,138,107,.16); --glowB:rgba(190,240,215,.40);
+  --navBg:rgba(240,252,246,.94); --dlgBg:#f7fdfa; --toastBg:rgba(240,252,246,.98);
+  --inputBg:rgba(255,255,255,.75); --swOff:rgba(47,138,107,.25);
+  --testBg:rgba(47,138,107,.18); --mainAct1:rgba(47,138,107,.30); --mainAct2:rgba(47,138,107,.14);
+  --danger:#b3261e; --dangerLine:rgba(179,38,30,.45); --overlay:rgba(50,35,55,.40);
+  --fx1:#3aa585; --fx2:#9bdcc0; --fx3:#2a9470; --fx4:#e0a030; --star:#9bdcc0;
+}
+:root[data-theme="lavanta"]{
+  --bg1:#e4daf7; --bg2:#f8f4ff;
+  --bgImage:radial-gradient(75% 45% at 12% 0%,rgba(215,200,250,.7),transparent 65%),linear-gradient(180deg,#f8f4ff 0%,#e4daf7 100%);
+  --gold:#7a5bb5; --gold2:#5b3f93; --onGold:#fffafc;
+  --ivory:#2c2540; --teal:#8d6fd0; --muted:#7a6f99;
+  --card:rgba(122,91,181,.07); --card2:rgba(122,91,181,.10); --press:rgba(122,91,181,.16);
+  --line:rgba(122,91,181,.30); --lineSoft:rgba(122,91,181,.22); --lineFaint:rgba(122,91,181,.12);
+  --bead:#d9ccf2; --beadLine:rgba(122,91,181,.28); --beadOn:#7550c0; --beadOnLine:rgba(0,0,0,.25);
+  --imame:#f2c9e0; --imameLine:#7a5bb5; --imameOn:#d6559a; --imameOnLine:#7a2250;
+  --end:#c9b0ee; --endLine:#5b3f93; --endOn:#b03a7a;
+  --btn1:#fdfbff; --btn2:#dccff5; --btnLine:rgba(122,91,181,.55); --btnText:#2c2540;
+  --btnGlow:rgba(122,91,181,.22); --btnShadow:rgba(122,91,181,.28); --btnInset:rgba(122,91,181,.10); --btnInset2:rgba(122,91,181,.22);
+  --cntGlow:rgba(255,255,255,0);
+  --glowA:rgba(122,91,181,.16); --glowB:rgba(215,200,250,.40);
+  --navBg:rgba(246,242,255,.94); --dlgBg:#faf7ff; --toastBg:rgba(246,242,255,.98);
+  --inputBg:rgba(255,255,255,.75); --swOff:rgba(122,91,181,.25);
+  --testBg:rgba(122,91,181,.18); --mainAct1:rgba(122,91,181,.30); --mainAct2:rgba(122,91,181,.14);
+  --danger:#b3261e; --dangerLine:rgba(179,38,30,.45); --overlay:rgba(50,35,55,.40);
+  --fx1:#8d6fd0; --fx2:#c9b6f0; --fx3:#7550c0; --fx4:#d6559a; --star:#c9b6f0;
+}
+:root[data-theme="mavi"]{
+  --bg1:#d6eafa; --bg2:#f2f9ff;
+  --bgImage:radial-gradient(75% 45% at 12% 0%,rgba(190,225,255,.7),transparent 65%),linear-gradient(180deg,#f2f9ff 0%,#d6eafa 100%);
+  --gold:#3f7fb8; --gold2:#2b5f92; --onGold:#fffafc;
+  --ivory:#1f3347; --teal:#4aa3c9; --muted:#60809a;
+  --card:rgba(63,127,184,.07); --card2:rgba(63,127,184,.10); --press:rgba(63,127,184,.16);
+  --line:rgba(63,127,184,.30); --lineSoft:rgba(63,127,184,.22); --lineFaint:rgba(63,127,184,.12);
+  --bead:#c4dff3; --beadLine:rgba(63,127,184,.28); --beadOn:#2f78b5; --beadOnLine:rgba(0,0,0,.25);
+  --imame:#f6dca8; --imameLine:#3f7fb8; --imameOn:#e0902f; --imameOnLine:#6e4608;
+  --end:#a9cbe8; --endLine:#2b5f92; --endOn:#c0502b;
+  --btn1:#fbfdff; --btn2:#cfe5f7; --btnLine:rgba(63,127,184,.55); --btnText:#1f3347;
+  --btnGlow:rgba(63,127,184,.22); --btnShadow:rgba(63,127,184,.28); --btnInset:rgba(63,127,184,.10); --btnInset2:rgba(63,127,184,.22);
+  --cntGlow:rgba(255,255,255,0);
+  --glowA:rgba(63,127,184,.16); --glowB:rgba(190,225,255,.40);
+  --navBg:rgba(240,248,255,.94); --dlgBg:#f7fbff; --toastBg:rgba(240,248,255,.98);
+  --inputBg:rgba(255,255,255,.75); --swOff:rgba(63,127,184,.25);
+  --testBg:rgba(63,127,184,.18); --mainAct1:rgba(63,127,184,.30); --mainAct2:rgba(63,127,184,.14);
+  --danger:#b3261e; --dangerLine:rgba(179,38,30,.45); --overlay:rgba(50,35,55,.40);
+  --fx1:#4aa3c9; --fx2:#a8d4ee; --fx3:#2f78b5; --fx4:#e0902f; --star:#a8d4ee;
+}
+:root[data-theme="pembe"] #stars i,:root[data-theme="nane"] #stars i,:root[data-theme="lavanta"] #stars i,:root[data-theme="mavi"] #stars i{display:none}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg1);color:var(--ivory);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-user-select:none;user-select:none}
+button{font:inherit;color:inherit;border:0;background:none;touch-action:manipulation;cursor:pointer}
+body{background:var(--bgImage)}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+#stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--star);opacity:.15;animation:twinkle 4s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.08;transform:scale(.8)}50%{opacity:.55;transform:scale(1.4)}}
+/* Ay Işığı süsleri: ay ve ateş böcekleri */
+#moon{display:none;position:fixed;top:12px;right:14px;width:56px;height:56px;border-radius:50%;z-index:0;pointer-events:none;
+  background:radial-gradient(circle at 36% 34%,#fffef4 0%,#eef3ff 45%,#c3d0ee 100%);
+  box-shadow:0 0 26px 8px rgba(200,220,255,.45),0 0 80px 26px rgba(150,185,255,.20);animation:moonglow 6s ease-in-out infinite alternate}
+#moon::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 62% 30%,rgba(150,165,200,.35) 0 6%,transparent 7%),radial-gradient(circle at 40% 62%,rgba(150,165,200,.28) 0 9%,transparent 10%),radial-gradient(circle at 70% 66%,rgba(150,165,200,.25) 0 5%,transparent 6%)}
+@keyframes moonglow{from{box-shadow:0 0 22px 6px rgba(200,220,255,.38),0 0 70px 20px rgba(150,185,255,.16)}to{box-shadow:0 0 32px 12px rgba(200,220,255,.55),0 0 100px 34px rgba(150,185,255,.26)}}
+:root[data-theme="ay"] #moon{display:block}
+.ff{display:none;position:absolute;width:5px;height:5px;border-radius:50%;background:#ffeaa0;box-shadow:0 0 8px 3px rgba(255,226,130,.6);opacity:0;animation:ffly var(--d,9s) ease-in-out infinite}
+:root[data-theme="ay"] .ff{display:block}
+@keyframes ffly{0%{opacity:0;transform:translate(0,0)}15%{opacity:.95}50%{opacity:.35;transform:translate(var(--x),var(--y))}85%{opacity:.95}100%{opacity:0;transform:translate(calc(var(--x)*-.5),calc(var(--y)*1.4))}}
+
+#app{position:relative;z-index:1;display:flex;flex-direction:column;height:100dvh}
+main{position:relative;flex:1;min-height:0}
+.tab{position:absolute;inset:0;overflow-y:auto;padding:14px 16px 20px;opacity:0;visibility:hidden;
+  transform:translateY(14px);transition:opacity .35s,transform .35s,visibility .35s}
+.tab.active{opacity:1;visibility:visible;transform:none}
+#tab-zikir{display:flex;flex-direction:column;align-items:center;gap:10px;overflow:hidden}
+
+/* üst kısım */
+.namebtn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:30px;background:var(--card);
+  border:1px solid var(--line);font-size:1.25rem;font-weight:600;color:var(--gold);transition:transform .15s,background .2s}
+.namebtn:active{transform:scale(.96);background:var(--press)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.chip{min-width:52px;padding:9px 14px;border-radius:22px;background:var(--card);border:1px solid transparent;
+  font-size:1.05rem;font-weight:600;color:var(--muted);transition:all .25s}
+.chip.on{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--onGold);box-shadow:0 0 14px var(--cntGlow);transform:scale(1.06)}
+.chip:active{transform:scale(.94)}
+
+/* çember */
+.ringWrap{position:relative;width:var(--size);height:var(--size);flex:none}
+.glow{position:absolute;inset:-8%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,var(--glowA),var(--glowB) 55%,transparent 70%);
+  animation:breathe 5s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scale(.94);opacity:.7}to{transform:scale(1.04);opacity:1}}
+.ringWrap.flash .glow{animation:flash .9s ease-out}
+@keyframes flash{0%{transform:scale(1);opacity:1;filter:brightness(2.4)}100%{transform:scale(1.15);opacity:.8;filter:none}}
+#ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.rd1{fill:none;stroke:var(--lineSoft);stroke-width:1}
+.rd2{fill:none;stroke:var(--lineFaint);stroke-width:1}
+.pointer{fill:var(--gold);stroke:var(--gold);stroke-width:2;stroke-linejoin:round;filter:drop-shadow(0 2px 2px var(--embLo))}
+#beadsG{transform-origin:200px 200px;transform-box:view-box;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.bead{fill:var(--bead);stroke:var(--beadLine);stroke-width:1;transition:fill .3s;transform-box:fill-box;transform-origin:center}
+.bead.on{fill:var(--beadOn);stroke:var(--beadOnLine)}
+.bead.imame{fill:var(--imame);stroke:var(--imameLine);stroke-width:1.5}
+.bead.imame.on{fill:var(--imameOn);stroke:var(--imameOnLine)}
+.bead.end{fill:var(--end);stroke:var(--endLine);stroke-width:2}
+.bead.end.on{fill:var(--endOn)}
+.bead.cur{animation:beadpulse .5s ease-out}
+@keyframes beadpulse{0%{transform:scale(1)}40%{transform:scale(1.7)}100%{transform:scale(1)}}
+.track{fill:none;stroke:var(--bead);stroke-width:10}
+.prog{fill:none;stroke:var(--beadOn);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .35s}
+.tick{stroke:var(--gold);stroke-width:4;stroke-linecap:round}
+#tapBtn{position:absolute;inset:23%;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--btnText);
+  background:radial-gradient(circle at 35% 28%,var(--btn1),var(--btn2) 70%);border:2px solid var(--btnLine);
+  box-shadow:0 10px 30px var(--btnShadow),inset 0 0 28px var(--btnInset),0 0 24px var(--btnGlow);
+  transition:transform .09s,box-shadow .2s;outline:none}
+#tapBtn:active,#tapBtn.down{transform:scale(.93);box-shadow:0 4px 14px var(--btnShadow),inset 0 0 34px var(--btnInset2),0 0 34px var(--cntGlow)}
+#cnt{font-size:calc(var(--size)*.17);font-weight:700;line-height:1;letter-spacing:-1px;text-shadow:0 0 18px var(--cntGlow)}
+#cnt.pop{animation:pop .28s ease-out}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.2)}100%{transform:scale(1)}}
+#ofTxt{margin-top:4px;font-size:calc(var(--size)*.055);color:var(--muted)}
+#turTxt{margin-top:6px;font-size:calc(var(--size)*.096);line-height:1;color:var(--gold);font-weight:600}
+#fx{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.ripple{position:absolute;inset:22%;border-radius:50%;border:3px solid var(--gold);animation:ripple .65s ease-out forwards}
+@keyframes ripple{from{transform:scale(.7);opacity:.7}to{transform:scale(1.35);opacity:0}}
+.p{position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);border-radius:50%;background:var(--c);
+  box-shadow:0 0 10px var(--c);animation:burst 1s ease-out forwards}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.2);opacity:0}}
+.shock{position:absolute;inset:18%;border-radius:50%;border:4px solid var(--gold);animation:shock 1s ease-out forwards}
+.shock.tur{border-width:6px;border-color:var(--beadOn)}
+@keyframes shock{from{transform:scale(.6);opacity:.9}to{transform:scale(1.5);opacity:0}}
+.info{font-size:.95rem;color:var(--muted);padding:6px 14px;border-radius:16px;background:var(--card);text-align:center}
+.actions{display:flex;gap:10px;width:100%;max-width:440px}
+.act{flex:1;padding:14px 6px;border-radius:16px;background:var(--card);border:1px solid var(--line);font-size:1.02rem;font-weight:600;transition:transform .12s,background .2s}
+.act:active{transform:scale(.95);background:var(--press)}
+.act.main{background:linear-gradient(135deg,var(--mainAct1),var(--mainAct2))}
+.act small{opacity:.75;font-weight:500}
+
+/* alt menü */
+nav{position:relative;display:flex;padding-bottom:env(safe-area-inset-bottom);background:var(--navBg);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;color:var(--muted);font-size:.85rem;transition:color .25s,transform .15s}
+nav button svg{width:26px;height:26px;transition:transform .3s}
+nav button.on{color:var(--gold)}
+nav button.on svg{transform:translateY(-2px) scale(1.12)}
+nav button:active{transform:scale(.94)}
+#ind{position:absolute;top:0;left:0;width:25%;height:3px;display:flex;justify-content:center;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+#ind i{width:44px;height:3px;border-radius:3px;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+
+/* geçmiş & ayarlar */
+h2{margin:6px 0 12px;font-size:1.35rem;color:var(--gold)}
+.sums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.sum{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 6px;text-align:center}
+.sum b{display:block;font-size:1.5rem;color:var(--ivory)}
+.sum span{font-size:.85rem;color:var(--muted)}
+.day{margin-top:14px}
+.dayh{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 6px}
+.dayh b{color:var(--gold)} .dayh span{color:var(--muted);font-size:.9rem}
+.hrow{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:14px;padding:11px 12px;margin-bottom:6px;animation:slidein .35s ease-out}
+@keyframes slidein{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.ht{color:var(--muted);font-variant-numeric:tabular-nums;min-width:48px}
+.hn{flex:1;font-weight:600}
+.hc{font-size:1.2rem;font-weight:700;color:var(--gold)}
+.hdel{width:34px;height:34px;border-radius:50%;color:var(--muted);background:var(--card)}
+.hdel:active{background:rgba(255,80,80,.35)}
+.empty{text-align:center;color:var(--muted);padding:40px 10px;line-height:1.6}
+.dangerbtn{width:100%;margin-top:18px;padding:13px;border-radius:14px;border:1px solid var(--dangerLine);color:var(--danger);font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:1.05rem;color:var(--gold)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}
+.row label{flex:1}
+.hint{font-size:.85rem;color:var(--muted);margin-top:6px;line-height:1.4}
+.segs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.seg{padding:10px 14px;border-radius:14px;background:var(--card);border:1px solid transparent;font-weight:600;color:var(--muted);transition:all .2s}
+.seg.on{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--onGold)}
+.seg:active{transform:scale(.95)}
+.inp{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--inputBg);color:var(--ivory);font-size:1.05rem;margin-top:6px;-webkit-user-select:text;user-select:text}
+.sw{position:relative;width:54px;height:30px;flex:none}
+.sw input{opacity:0;width:100%;height:100%;position:absolute;margin:0;z-index:2}
+.sw i{position:absolute;inset:0;border-radius:30px;background:var(--swOff);transition:background .25s}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--swKnob);transition:transform .25s}
+.sw input:checked+i{background:var(--teal)}
+.sw input:checked+i::after{transform:translateX(24px)}
+input[type=range]{width:100%;accent-color:var(--gold);height:34px}
+.testbtn{margin-top:8px;padding:11px 16px;border-radius:14px;background:var(--testBg);border:1px solid var(--teal);font-weight:600}
+.testbtn:active{transform:scale(.96)}
+/* tema seçici */
+.themes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.theme{position:relative;display:block;width:100%;text-align:left;padding:0;border-radius:16px;overflow:hidden;border:2px solid transparent;background:var(--card);transition:transform .15s,border-color .2s,box-shadow .2s}
+.theme:active{transform:scale(.97)}
+.theme .pv{position:relative;height:64px}
+.theme .pv i{position:absolute;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.theme .pm{position:absolute;top:8px;right:12px;width:14px;height:14px;border-radius:50%;background:#f3f7ff;box-shadow:0 0 10px 3px rgba(190,210,255,.6)}
+.theme .tn{padding:8px 10px}
+.theme .tn b{display:block;font-size:.98rem;color:var(--ivory)}
+.theme .tn span{font-size:.78rem;color:var(--muted);line-height:1.3;display:block}
+.theme.on{border-color:var(--gold);box-shadow:0 0 14px var(--cntGlow)}
+.theme.on::after{content:"✓";position:absolute;top:6px;left:8px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--onGold);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem}
+/* kaydet çubuğu */
+.savebar{margin:20px 0 10px;padding:14px;border:2px solid var(--gold);border-radius:22px;background:var(--card);box-shadow:0 0 16px var(--cntGlow)}
+.savebtn{width:100%;padding:17px;border-radius:18px;font-size:1.2rem;font-weight:700;color:var(--onGold);
+  background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 6px 20px rgba(0,0,0,.35),0 0 18px var(--cntGlow);transition:transform .12s}
+.savebtn:active{transform:scale(.97)}
+
+/* bildirim ve pencere */
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);padding:12px 20px;border-radius:24px;background:var(--toastBg);
+  border:1px solid var(--gold);color:var(--ivory);font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:50;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.ov{position:fixed;inset:0;z-index:60;background:var(--overlay);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .2s}
+.ov.out{opacity:0;transition:opacity .18s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.dlg{width:100%;max-width:380px;max-height:86dvh;overflow:auto;background:var(--dlgBg);border:1px solid var(--gold);border-radius:22px;padding:20px;animation:dlgin .25s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes dlgin{from{transform:scale(.88);opacity:0}to{transform:none;opacity:1}}
+.dlg h3{margin:0 0 8px;color:var(--gold);font-size:1.2rem}
+.dlg p{margin:0 0 12px;line-height:1.5;color:var(--ivory)}
+.dinp{width:100%;padding:13px;margin-bottom:14px;border-radius:12px;border:1px solid var(--line);background:var(--inputBg);color:var(--ivory);font-size:1.15rem;-webkit-user-select:text;user-select:text}
+.dbtns{display:flex;gap:10px;margin-top:6px}
+.dbtns.vert{flex-direction:column}
+.dbtn{flex:1;padding:13px;border-radius:14px;background:var(--card2);font-weight:600;font-size:1rem}
+.dbtn.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--onGold)}
+.dbtn:active{transform:scale(.96)}
+/* zikir listesi */
+.zl{max-width:400px}
+.zlist{display:flex;flex-direction:column;gap:8px;margin:6px 0 14px;max-height:52dvh;overflow-y:auto}
+.zrow{display:flex;align-items:stretch;gap:5px;flex-wrap:wrap;padding:7px;border:1px solid var(--lineFaint);border-radius:16px;background:var(--card)}
+.zpick{order:-1;flex:1 0 100%;width:100%;min-width:0;text-align:left;padding:10px 12px;border-radius:12px;background:var(--card2);border:1px solid transparent;display:flex;flex-direction:column;gap:4px;transition:transform .12s;overflow-wrap:anywhere}
+.zpick:active{transform:scale(.99)}
+.zpick b{font-size:1.05rem;line-height:1.35;color:var(--ivory);white-space:normal;overflow-wrap:anywhere;word-break:normal}
+.zpick span{font-size:.82rem;line-height:1.4;color:var(--muted);white-space:normal;overflow-wrap:anywhere}
+.zrow .zbtn{flex:1 1 34px;min-width:34px;width:auto;min-height:42px;border-radius:11px}
+.zrow .zmove{flex:1 1 34px;width:auto}
+.zrow.on .zpick{border-color:var(--gold);box-shadow:0 0 10px var(--cntGlow)}
+.zbtn{width:46px;border-radius:14px;background:var(--card);color:var(--muted);font-size:1.1rem}
+.zbtn:active{background:var(--press)}
+.zmove{width:38px;flex:none;font-size:1rem}.zmove:disabled{opacity:.25;cursor:default}
+.zadd,.zclose{width:100%;flex:none;margin-top:8px}
+.zlbl{font-size:.9rem;color:var(--muted);margin:4px 0}
+.zerr{color:var(--danger);font-size:.9rem;min-height:1.3em;margin:6px 0}
+/* ===== Antrasit & Pudra (koyu) ===== */
+:root[data-theme="antrasit"]{
+  --bg1:#1f2125; --bg2:#34383e;
+  --bgImage:radial-gradient(80% 45% at 15% 0%,rgba(243,223,227,.10),transparent 65%),linear-gradient(180deg,#363a40 0%,#26292e 55%,#1d1f23 100%);
+  --gold:#ecc9d0; --gold2:#c9a0aa; --onGold:#2a2024;
+  --ivory:#eceef0; --teal:#c7a9b5; --muted:#9aa1a9;
+  --card:rgba(255,255,255,.06); --card2:rgba(255,255,255,.09); --press:rgba(255,255,255,.13);
+  --line:rgba(236,201,208,.28); --lineSoft:rgba(236,201,208,.20); --lineFaint:rgba(236,201,208,.10);
+  --bead:#4a4f57; --beadLine:rgba(255,255,255,.12); --beadOn:#f6e6e9; --beadOnLine:rgba(255,255,255,.7);
+  --imame:#6e5b62; --imameLine:rgba(236,201,208,.75); --imameOn:#ecc9d0; --imameOnLine:#fff2f4;
+  --end:#7d646b; --endLine:#ecc9d0; --endOn:#f2a9b6;
+  --btn1:#4d525a; --btn2:#2b2e33; --btnLine:rgba(236,201,208,.45); --btnText:#eceef0;
+  --btnGlow:rgba(236,201,208,.14); --btnShadow:rgba(0,0,0,.55); --btnInset:rgba(255,255,255,.07); --btnInset2:rgba(236,201,208,.20);
+  --cntGlow:rgba(236,201,208,.35);
+  --glowA:rgba(199,169,181,.22); --glowB:rgba(236,201,208,.08);
+  --navBg:rgba(36,39,44,.94); --dlgBg:#2d3036; --toastBg:rgba(45,48,54,.97);
+  --inputBg:rgba(0,0,0,.28); --swOff:rgba(255,255,255,.16);
+  --testBg:rgba(199,169,181,.25); --mainAct1:rgba(199,169,181,.42); --mainAct2:rgba(199,169,181,.18);
+  --fx1:#ecc9d0; --fx2:#f6e6e9; --fx3:#c7a9b5; --fx4:#f2a9b6; --star:#f6e6e9;
+}
+/* ===== Açık Gri & Pudra Şekeri (açık) ===== */
+:root[data-theme="acikgri"]{
+  --bg1:#e3e6ea; --bg2:#f8f4f4;
+  --bgImage:radial-gradient(75% 45% at 12% 0%,rgba(255,226,231,.8),transparent 65%),linear-gradient(180deg,#f8f5f5 0%,#e3e6ea 100%);
+  --gold:#8f6270; --gold2:#734858; --onGold:#fffafa;
+  --ivory:#2f3338; --teal:#a58a96; --muted:#737a84;
+  --card:rgba(60,70,85,.06); --card2:rgba(60,70,85,.09); --press:rgba(60,70,85,.15);
+  --line:rgba(143,98,112,.30); --lineSoft:rgba(143,98,112,.22); --lineFaint:rgba(143,98,112,.12);
+  --bead:#d5d9de; --beadLine:rgba(60,70,85,.22); --beadOn:#8a5f6d; --beadOnLine:rgba(0,0,0,.25);
+  --imame:#efd3d8; --imameLine:#8f6270; --imameOn:#d98a9c; --imameOnLine:#7a2f44;
+  --end:#dcc5ca; --endLine:#734858; --endOn:#c0586f;
+  --btn1:#fcfcfd; --btn2:#e1e4e8; --btnLine:rgba(143,98,112,.45); --btnText:#2f3338;
+  --btnGlow:rgba(217,138,156,.18); --btnShadow:rgba(70,60,75,.26); --btnInset:rgba(143,98,112,.08); --btnInset2:rgba(143,98,112,.20);
+  --cntGlow:rgba(255,255,255,0);
+  --glowA:rgba(217,138,156,.16); --glowB:rgba(255,226,231,.45);
+  --navBg:rgba(244,242,243,.95); --dlgBg:#faf8f8; --toastBg:rgba(250,248,248,.98);
+  --inputBg:rgba(255,255,255,.8); --swOff:rgba(60,70,85,.25);
+  --testBg:rgba(217,138,156,.20); --mainAct1:rgba(217,138,156,.32); --mainAct2:rgba(217,138,156,.14);
+  --danger:#b3261e; --dangerLine:rgba(179,38,30,.45); --overlay:rgba(50,45,55,.40);
+  --fx1:#d98a9c; --fx2:#f2c9d1; --fx3:#8a5f6d; --fx4:#c0586f; --star:#c9a0aa;
+}
+:root[data-theme="antrasit"] #stars i,:root[data-theme="acikgri"] #stars i{display:none}
+
+/* ===== Kabartma (menü ve butonlar) ===== */
+:root{
+  --embHi:rgba(255,255,255,.09); --embLo:rgba(0,0,0,.42);
+  --raise:-3px -3px 8px var(--embHi),4px 4px 10px var(--embLo);
+  --raiseSm:-2px -2px 5px var(--embHi),3px 3px 7px var(--embLo);
+  --sunk:inset 3px 3px 7px var(--embLo),inset -2px -2px 6px var(--embHi);
+}
+:root[data-theme="sabah"],:root[data-theme="pembe"],:root[data-theme="nane"],:root[data-theme="lavanta"],:root[data-theme="mavi"],:root[data-theme="acikgri"]{
+  --embHi:rgba(255,255,255,.95); --embLo:rgba(80,65,75,.24);
+}
+:root[data-theme="antrasit"]{--embHi:rgba(255,255,255,.07); --embLo:rgba(0,0,0,.55)}
+
+.namebtn,.chip,.act,.seg,.testbtn,.dbtn,.zbtn,.zpick,.hdel,.theme{box-shadow:var(--raise)}
+.namebtn,.act{border-color:var(--lineFaint)}
+.namebtn:active,.chip:active,.act:active,.seg:active,.testbtn:active,.dbtn:active,.zbtn:active,.zpick:active,.hdel:active,.theme:active{box-shadow:var(--sunk)}
+.chip.on,.seg.on,.theme.on,.zrow.on .zpick{box-shadow:var(--sunk),0 0 12px var(--cntGlow)}
+.dbtn.primary{box-shadow:var(--raise)}
+.savebtn{box-shadow:var(--raise),0 0 18px var(--cntGlow)}
+.savebtn:active{box-shadow:var(--sunk)}
+#tapBtn{box-shadow:-7px -7px 18px var(--embHi),9px 11px 26px var(--btnShadow),inset 2px 2px 4px var(--embHi),inset 0 0 28px var(--btnInset),0 0 24px var(--btnGlow)}
+nav{box-shadow:0 -4px 14px var(--embLo),inset 0 1px 0 var(--embHi)}
+nav button{margin:5px 5px 4px;border-radius:16px;box-shadow:var(--raiseSm)}
+nav button.on,nav button:active{box-shadow:var(--sunk)}
+
+/* ===== Esmaül Hüsna paneli ===== */
+#esmaPanel{display:none;align-items:stretch;gap:8px;width:100%;max-width:440px}
+.esma #esmaPanel{display:flex}
+.esma #totalChips{display:none}
+:root.esma{--size:max(210px,min(88vw,calc(100dvh - 412px),430px))}
+.esnav{width:48px;border-radius:16px;background:var(--card);border:1px solid var(--lineFaint);font-size:1.9rem;line-height:1;color:var(--gold);box-shadow:var(--raise)}
+.esmid{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:6px 10px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--raise)}
+.esnav:active,.esmid:active{box-shadow:var(--sunk)}
+.esar,.esar2{font-family:"Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro","Traditional Arabic",serif}
+.esar{font-size:2.1rem;line-height:1.4;color:var(--gold);white-space:nowrap;max-width:100%;overflow:hidden}
+.estr{font-size:.85rem;color:var(--muted)}
+.esar2{align-self:flex-start;font-size:1.35rem!important;line-height:1.4}
+.eall{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.eall .dinp{flex:1;min-width:0}
+.eall .dbtn{flex:none;padding:13px 12px}
+.ecnt{width:78px;flex:none;padding:10px 6px;border-radius:12px;border:1px solid var(--line);background:var(--inputBg);color:var(--ivory);font-size:1.05rem;text-align:center;-webkit-user-select:text;user-select:text}
+html.large-mode{font-size:19px}
+html.large-mode .zpick b{font-size:1.2rem}
+html.large-mode .zpick span,html.large-mode .hint,html.large-mode .info{font-size:1rem}
+html.large-mode button{min-height:48px}
+html.large-mode .act,html.large-mode .testbtn,html.large-mode .dbtn{font-size:1.08rem}
+.target-edit{display:flex;gap:8px;align-items:stretch}.target-edit .inp{flex:1;min-width:0;margin:0}.target-edit .testbtn{width:auto;flex:1;min-width:120px;margin:0;padding:10px}
+.stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0}
+.stat-card{padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.stat-card b{display:block;font-size:1.5rem;color:var(--gold);overflow-wrap:anywhere}
+.stat-card span{display:block;font-size:.88rem;color:var(--muted);margin-top:4px}
+.goalbar{height:13px;border-radius:99px;overflow:hidden;background:var(--card2);border:1px solid var(--lineFaint);margin:10px 0}
+.goalbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:99px;transition:width .25s}
+.week-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-items:end;height:140px;margin-top:14px}
+.weekday{display:flex;flex-direction:column;align-items:center;justify-content:end;gap:6px;height:100%;min-width:0;font-size:.75rem;color:var(--muted)}
+.weekday i{display:block;width:100%;max-width:28px;min-height:3px;border-radius:7px 7px 3px 3px;background:var(--teal)}
+.weekday b{font-size:.7rem;font-weight:500;overflow-wrap:anywhere}
+@media(max-width:360px){.zrow{gap:4px;padding:5px}.zrow .zbtn{min-width:30px;flex-basis:30px}.stats-grid{gap:6px}.stat-card{padding:10px}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div id="moon"></div>
+<div id="app">
+  <main>
+    <!-- ZİKİR -->
+    <section id="tab-zikir" class="tab active">
+      <button class="namebtn" id="nameBtn"><span id="zName">Sübhanallah</span><span>▾</span></button>
+      <div class="chips" id="totalChips"></div>
+      <div id="esmaPanel">
+        <button class="esnav" id="esPrev" aria-label="Önceki isim">‹</button>
+        <button class="esmid" id="esMid" aria-label="Esmaül Hüsna listesi ve sayılar"><span class="esar" id="esAr" lang="ar" dir="rtl"></span><span class="estr" id="esTr"></span></button>
+        <button class="esnav" id="esNext" aria-label="Sonraki isim">›</button>
+      </div>
+      <div class="ringWrap" id="ringWrap">
+        <div class="glow"></div>
+        <svg id="ring" viewBox="0 0 400 400">
+          <circle class="rd1" cx="200" cy="200" r="182"/>
+          <circle class="rd2" cx="200" cy="200" r="132"/>
+          <g id="arcG"></g>
+          <g id="beadsG"></g>
+          <path class="pointer" d="M195 0 H205 V12 H214 L200 29 L186 12 H195 Z"/>
+        </svg>
+        <button id="tapBtn" aria-label="Zikir say">
+          <div id="cnt">0</div>
+          <div id="ofTxt">/ 100</div>
+          <div id="turTxt">0</div>
+        </button>
+        <div id="fx"></div>
+      </div>
+      <div class="info" id="infoLine"></div>
+      <div class="actions">
+        <button class="act" id="undoBtn">↶ Geri al</button>
+        <button class="act main" id="saveBtn">✓ Kaydet <small id="sessTxt"></small></button>
+        <button class="act" id="resetBtn">⟲ Sıfırla</button>
+      </div>
+    </section>
+
+    <!-- İSTATİSTİK -->
+    <section id="tab-istatistik" class="tab">
+      <h2>İstatistikler</h2>
+      <div id="statsBody"></div>
+    </section>
+
+    <!-- GEÇMİŞ -->
+    <section id="tab-gecmis" class="tab">
+      <h2>Zikir geçmişi</h2>
+      <div id="histBody"></div>
+    </section>
+
+    <!-- AYARLAR -->
+    <section id="tab-ayar" class="tab">
+      <h2>Ayarlar</h2>
+      <div id="setBody"></div>
+    </section>
+  </main>
+  <nav>
+    <div id="ind"><i></i></div>
+    <button class="on" data-tab="zikir">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-dasharray="0.01 5.33" stroke-linecap="round"/></svg>Zikir</button>
+    <button data-tab="istatistik">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19H21"/><path d="M8 16v-5M13 16V7M18 16v-8"/></svg>İstatistik</button>
+    <button data-tab="gecmis">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Geçmiş</button>
+    <button data-tab="ayar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h9M19 7h1M4 17h2M12 17h8"/><circle cx="16" cy="7" r="2.3"/><circle cx="9" cy="17" r="2.3"/></svg>Ayarlar</button>
+  </nav>
+</div>
+<div id="toast"></div>
+<div id="modalRoot"></div>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+/* ---------- Temalar ---------- */
+const THEMES=[
+  {id:'zumrut',name:'Zümrüt Gece',desc:'İlk tema, koyu yeşil ve altın',bg:'radial-gradient(120% 90% at 50% 0%,#0f3d38,#061a19 70%)',c:['#2c6b64','#f6efd6','#e9c46a'],meta:'#07211f'},
+  {id:'ay',name:'Ay Işığı',desc:'Ay ışığında serin bir yaz akşamı',bg:'linear-gradient(180deg,#070f26,#0c1f45 55%,#123a63)',c:['#2c4a7e','#eaf2ff','#ffe08a'],meta:'#070f26',moon:true},
+  {id:'gunbatimi',name:'Gün Batımı',desc:'Sıcak turuncu ve gül tonları',bg:'radial-gradient(100% 70% at 50% 110%,rgba(255,140,60,.6),transparent 65%),linear-gradient(180deg,#1b0b22,#3d1531 55%,#6b2630)',c:['#7a3446','#fff0e2','#ffb86b'],meta:'#1b0b22'},
+  {id:'sabah',name:'Sabah Işığı',desc:'Açık renkli, gün ışığında rahat okunur',bg:'radial-gradient(75% 60% at 12% 0%,rgba(255,206,110,.7),transparent 65%),linear-gradient(180deg,#fff8e6,#f1e5c4)',c:['#d8c9a0','#1f7a6d','#c9731a'],meta:'#f3e9cf'},
+  {id:'pembe',name:'Pembe Pastel',desc:'Yumuşak gül ve pudra tonları',bg:'radial-gradient(75% 60% at 12% 0%,rgba(255,200,220,.8),transparent 65%),linear-gradient(180deg,#fff5f8,#fbdfe9)',c:['#f1c6d6','#c2467a','#e07a3c'],meta:'#fbdfe9'},
+  {id:'nane',name:'Nane Pastel',desc:'Ferah nane yeşili',bg:'radial-gradient(75% 60% at 12% 0%,rgba(190,240,215,.8),transparent 65%),linear-gradient(180deg,#f2fcf7,#d9f2e5)',c:['#bfe6d2','#2a9470','#d99a2b'],meta:'#d9f2e5'},
+  {id:'lavanta',name:'Lavanta Pastel',desc:'Sakin lila ve mor tonları',bg:'radial-gradient(75% 60% at 12% 0%,rgba(215,200,250,.8),transparent 65%),linear-gradient(180deg,#f8f4ff,#e4daf7)',c:['#d9ccf2','#7550c0','#d6559a'],meta:'#e4daf7'},
+  {id:'mavi',name:'Bulut Mavisi',desc:'Açık gökyüzü mavisi',bg:'radial-gradient(75% 60% at 12% 0%,rgba(190,225,255,.8),transparent 65%),linear-gradient(180deg,#f2f9ff,#d6eafa)',c:['#c4dff3','#2f78b5','#e0902f'],meta:'#d6eafa'},
+  {id:'antrasit',name:'Antrasit & Pudra',desc:'Koyu antrasit, pudra pembesi vurgu',bg:'radial-gradient(80% 60% at 15% 0%,rgba(243,223,227,.16),transparent 65%),linear-gradient(180deg,#3a3e44,#1f2125)',c:['#4a4f57','#f6e6e9','#ecc9d0'],meta:'#26292e'},
+  {id:'acikgri',name:'Açık Gri & Pudra',desc:'Açık gri zemin, pudra şekeri tonları',bg:'radial-gradient(75% 60% at 12% 0%,rgba(255,226,231,.9),transparent 65%),linear-gradient(180deg,#f8f5f5,#e3e6ea)',c:['#d5d9de','#8a5f6d','#d98a9c'],meta:'#e3e6ea'}
+];
+const THEME_IDS=THEMES.map(t=>t.id);
+function applyTheme(id){
+  if(!THEME_IDS.includes(id)) id='zumrut';
+  document.documentElement.setAttribute('data-theme',id);
+  const m=document.querySelector('meta[name=theme-color]');
+  if(m) m.setAttribute('content',THEMES[THEME_IDS.indexOf(id)].meta);
+}
+
+/* ---------- Veri ---------- */
+/* ---------- Esmaül Hüsna: 1-99 ilk 99 isim, 100. Allah ---------- */
+const ESMA_NAME="Esmaül Hüsna";
+const ESMA=[
+  ["Er-Rahmân","الرَّحْمَنُ"],
+  ["Er-Rahîm","الرَّحِيمُ"],
+  ["El-Melik","الْمَلِكُ"],
+  ["El-Kuddûs","الْقُدُّوسُ"],
+  ["Es-Selâm","السَّلَامُ"],
+  ["El-Mü'min","الْمُؤْمِنُ"],
+  ["El-Müheymin","الْمُهَيْمِنُ"],
+  ["El-Azîz","الْعَزِيزُ"],
+  ["El-Cebbâr","الْجَبَّارُ"],
+  ["El-Mütekebbir","الْمُتَكَبِّرُ"],
+  ["El-Hâlık","الْخَالِقُ"],
+  ["El-Bârî","الْبَارِئُ"],
+  ["El-Musavvir","الْمُصَوِّرُ"],
+  ["El-Gaffâr","الْغَفَّارُ"],
+  ["El-Kahhâr","الْقَهَّارُ"],
+  ["El-Vehhâb","الْوَهَّابُ"],
+  ["Er-Razzâk","الرَّزَّاقُ"],
+  ["El-Fettâh","الْفَتَّاحُ"],
+  ["El-Alîm","الْعَلِيمُ"],
+  ["El-Kâbid","الْقَابِضُ"],
+  ["El-Bâsıt","الْبَاسِطُ"],
+  ["El-Hâfıd","الْخَافِضُ"],
+  ["Er-Râfi'","الرَّافِعُ"],
+  ["El-Mu'ız","الْمُعِزُّ"],
+  ["El-Müzill","الْمُذِلُّ"],
+  ["Es-Semî'","السَّمِيعُ"],
+  ["El-Basîr","الْبَصِيرُ"],
+  ["El-Hakem","الْحَكَمُ"],
+  ["El-Adl","الْعَدْلُ"],
+  ["El-Latîf","اللَّطِيفُ"],
+  ["El-Habîr","الْخَبِيرُ"],
+  ["El-Halîm","الْحَلِيمُ"],
+  ["El-Azîm","الْعَظِيمُ"],
+  ["El-Gafûr","الْغَفُورُ"],
+  ["Eş-Şekûr","الشَّكُورُ"],
+  ["El-Aliyy","الْعَلِيُّ"],
+  ["El-Kebîr","الْكَبِيرُ"],
+  ["El-Hafîz","الْحَفِيظُ"],
+  ["El-Mukît","الْمُقِيتُ"],
+  ["El-Hasîb","الْحَسِيبُ"],
+  ["El-Celîl","الْجَلِيلُ"],
+  ["El-Kerîm","الْكَرِيمُ"],
+  ["Er-Rakîb","الرَّقِيبُ"],
+  ["El-Mücîb","الْمُجِيبُ"],
+  ["El-Vâsi'","الْوَاسِعُ"],
+  ["El-Hakîm","الْحَكِيمُ"],
+  ["El-Vedûd","الْوَدُودُ"],
+  ["El-Mecîd","الْمَجِيدُ"],
+  ["El-Bâis","الْبَاعِثُ"],
+  ["Eş-Şehîd","الشَّهِيدُ"],
+  ["El-Hakk","الْحَقُّ"],
+  ["El-Vekîl","الْوَكِيلُ"],
+  ["El-Kaviyy","الْقَوِيُّ"],
+  ["El-Metîn","الْمَتِينُ"],
+  ["El-Veliyy","الْوَلِيُّ"],
+  ["El-Hamîd","الْحَمِيدُ"],
+  ["El-Muhsî","الْمُحْصِي"],
+  ["El-Mübdi'","الْمُبْدِئُ"],
+  ["El-Mu'îd","الْمُعِيدُ"],
+  ["El-Muhyî","الْمُحْيِي"],
+  ["El-Mümît","الْمُمِيتُ"],
+  ["El-Hayy","الْحَيُّ"],
+  ["El-Kayyûm","الْقَيُّومُ"],
+  ["El-Vâcid","الْوَاجِدُ"],
+  ["El-Mâcid","الْمَاجِدُ"],
+  ["El-Vâhid","الْوَاحِدُ"],
+  ["El-Ehad","الْأَحَدُ"],
+  ["Es-Samed","الصَّمَدُ"],
+  ["El-Kâdir","الْقَادِرُ"],
+  ["El-Muktedir","الْمُقْتَدِرُ"],
+  ["El-Mukaddim","الْمُقَدِّمُ"],
+  ["El-Muahhir","الْمُؤَخِّرُ"],
+  ["El-Evvel","الْأَوَّلُ"],
+  ["El-Âhir","الْآخِرُ"],
+  ["Ez-Zâhir","الظَّاهِرُ"],
+  ["El-Bâtın","الْبَاطِنُ"],
+  ["El-Vâlî","الْوَالِي"],
+  ["El-Müteâlî","الْمُتَعَالِي"],
+  ["El-Berr","الْبَرُّ"],
+  ["Et-Tevvâb","التَّوَّابُ"],
+  ["El-Müntekim","الْمُنْتَقِمُ"],
+  ["El-Afüvv","الْعَفُوُّ"],
+  ["Er-Raûf","الرَّءُوفُ"],
+  ["Mâlikül-Mülk","مَالِكُ الْمُلْكِ"],
+  ["Zül-Celâli vel-İkrâm","ذُو الْجَلَالِ وَالْإِكْرَامِ"],
+  ["El-Muksit","الْمُقْسِطُ"],
+  ["El-Câmi'","الْجَامِعُ"],
+  ["El-Ganiyy","الْغَنِيُّ"],
+  ["El-Muğnî","الْمُغْنِي"],
+  ["El-Mâni'","الْمَانِعُ"],
+  ["Ed-Dârr","الضَّارُّ"],
+  ["En-Nâfi'","النَّافِعُ"],
+  ["En-Nûr","النُّورُ"],
+  ["El-Hâdî","الْهَادِي"],
+  ["El-Bedî'","الْبَدِيعُ"],
+  ["El-Bâkî","الْبَاقِي"],
+  ["El-Vâris","الْوَارِثُ"],
+  ["Er-Reşîd","الرَّشِيدُ"],
+  ["Es-Sabûr","الصَّبُورُ"],
+  ["Allah","اللّٰهُ"]
+];
+function cleanEsma(e){
+  const c=Array.isArray(e&&e.counts)?e.counts:[], counts=[];
+  for(let i=0;i<100;i++) counts[i]=(c[i]>=1&&c[i]<=9999)?Math.floor(c[i]):33;
+  return {active:!!(e&&e.active),idx:(e&&e.idx>=0&&e.idx<100)?Math.floor(e.idx):0,counts,prevTotal:(e&&e.prevTotal>=1&&e.prevTotal<=9999)?Math.floor(e.prevTotal):null};
+}
+const KEY='zikirmatik_v1'; // v1 ile aynı anahtar: eski kayıtlar ve geçmiş korunur
+const DEFAULTS={
+  settings:{total:100,imameMode:'every',imameEvery:33,imameCustom:[],imameFb:'both',turFb:'both',
+    sound:'can',vibPattern:'double',volume:0.7,
+    tapFb:'vibrate',tapVibPattern:'tiny',tapSound:'tik',
+    theme:'zumrut',keepAwake:false,autoSave:false,largeMode:false,dailyTarget:500,name:'Sübhanallah'},
+  state:{count:0,rounds:0,session:0,sessionStartedAt:0},
+  history:[]
+};
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){
+      const o=JSON.parse(raw), rs=o.settings||{};
+      const d={settings:{...DEFAULTS.settings,...rs},state:{...DEFAULTS.state,...(o.state||{})},history:Array.isArray(o.history)?o.history:[]};
+      d.settings.dailyTarget=Math.min(999999,Math.max(1,parseInt(d.settings.dailyTarget,10)||500));
+      d.settings.largeMode=!!d.settings.largeMode;
+      d.state.sessionStartedAt=Number(d.state.sessionStartedAt)||0;
+      if(rs.tapFb===undefined&&('tapVib' in rs||'tapTick' in rs)){ // v1'den geçiş
+        const v=rs.tapVib!==false, t=!!rs.tapTick;
+        d.settings.tapFb=(v&&t)?'both':v?'vibrate':t?'sound':'none';
+      }
+      delete d.settings.tapVib; delete d.settings.tapTick;
+      if(!THEME_IDS.includes(d.settings.theme)) d.settings.theme='zumrut';
+      if(!(d.settings.total>=1&&d.settings.total<=9999)) d.settings.total=100;
+      if(!(d.state.count>=0&&d.state.count<=d.settings.total)) d.state.count=0;
+      d.zikirs=cleanZikirs(o.zikirs,d.settings.name);
+      d.esma=cleanEsma(o.esma);
+      if(d.settings.name!==ESMA_NAME) d.esma.active=false;
+      if(d.esma.active){ d.settings.total=d.esma.counts[d.esma.idx]; if(d.state.count>d.settings.total) d.state.count=0; }
+      return d;
+    }
+  }catch(e){}
+  const f=clone(DEFAULTS); f.zikirs=cleanZikirs(null,f.settings.name); f.esma=cleanEsma(null); return f;
+}
+function newId(){return 'z'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function defaultZikirs(){
+  return ['Sübhanallah','Elhamdülillah','Allahu Ekber','Lâ ilâhe illallah','Estağfirullah','Salavat-ı Şerife','Serbest zikir'].map(n=>({id:newId(),name:n,count:null}));
+}
+function cleanZikirs(a,curName){
+  const list=Array.isArray(a)
+    ?a.filter(z=>z&&typeof z.name==='string'&&z.name.trim()).map(z=>({id:String(z.id||newId()),name:z.name.trim().slice(0,40),count:(z.count>=1&&z.count<=9999)?Math.floor(z.count):null,...(z.type==='esma'?{type:'esma'}:{}),...(z.imameMode?{imameMode:['none','every','custom'].includes(z.imameMode)?z.imameMode:'every',imameEvery:Number.isInteger(z.imameEvery)&&z.imameEvery>0?z.imameEvery:33,imameCustom:Array.isArray(z.imameCustom)?z.imameCustom.filter(p=>Number.isInteger(p)&&p>0&&p<=9999):[]}:{})}))
+    :defaultZikirs();
+  if(curName&&!list.some(z=>z.name===curName)) list.push({id:newId(),name:curName,count:null});
+  const e=list.find(z=>z.type==='esma')||list.find(z=>z.name===ESMA_NAME);
+  if(e){e.type='esma'; e.count=null;} else list.push({id:newId(),name:ESMA_NAME,type:'esma',count:null});
+  return list;
+}
+let D=load();
+function applyLargeMode(){document.documentElement.classList.toggle('large-mode',!!D.settings.largeMode);}
+applyLargeMode();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
+/* Ayarlar ekranında yapılan değişiklikler önce taslakta (DR) tutulur, Kaydet'e basınca D.settings'e geçer */
+let DR=null;
+const cfg=()=>DR||D.settings;
+
+const PRESETS=[10,33,99,100];
+const RECOMMENDED={100:33,99:33,33:11,10:0};
+const PRESET_NAMES=['Sübhanallah','Elhamdülillah','Allahu Ekber','Lâ ilâhe illallah','Estağfirullah','Salavat-ı Şerife','Serbest zikir'];
+const FB_LABEL={none:'Bildirim yok',vibrate:'Titreşim',sound:'Ses',both:'Ses + titreşim'};
+const SOUND_LABEL={can:'Çan',bip:'Bip',damla:'Damla',gong:'Gong',tahta:'Tahta'};
+const TAPSOUND_LABEL={tik:'Tık',tahta:'Tahta',damla:'Damla',bip:'Bip',can:'Çan'};
+const VIB_LABEL={short:'Kısa',double:'Çift',long:'Uzun'};
+const TAPVIB_LABEL={tiny:'Çok hafif',light:'Hafif',medium:'Orta',strong:'Güçlü',double:'Çift'};
+const VIB={short:[70],double:[90,70,90],long:[450]};
+const VIB_TAP={tiny:[20],light:[55],medium:[110],strong:[220],double:[70,70,70]};
+const VIB_TUR=[200,100,200,100,500];
+
+/* ---------- Ses & titreşim ---------- */
+let ac=null;
+function audio(){
+  if(!ac){const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; ac=new C();}
+  if(ac.state==='suspended') ac.resume();
+  return ac;
+}
+function tone(freq,t0,dur,type,gain,slideTo){
+  const a=audio(); if(!a) return;
+  const o=a.createOscillator(), g=a.createGain(), t=a.currentTime+t0, vol=Math.max(0.0002,gain*cfg().volume);
+  o.type=type||'sine'; o.frequency.setValueAtTime(freq,t);
+  if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.012); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+dur+0.05);
+}
+const SOUNDS={
+  can:(m,t)=>{tone(660*m,t,1.5,'sine',.5);tone(1320*m,t,1.0,'sine',.22);tone(1980*m,t,.7,'sine',.12);},
+  bip:(m,t)=>{tone(1000*m,t,.13,'sine',.5);tone(1400*m,t+.14,.13,'sine',.5);},
+  damla:(m,t)=>{tone(1300*m,t,.28,'sine',.55,520*m);},
+  gong:(m,t)=>{tone(140*m,t,2.2,'sine',.7);tone(280*m,t,1.4,'triangle',.25);tone(425*m,t,.9,'sine',.15);},
+  tahta:(m,t)=>{tone(320*m,t,.09,'triangle',.7,150*m);},
+  tik:(m,t)=>{tone(1900*m,t,.045,'square',.22,1100*m);}
+};
+function playSound(name,kind){
+  const f=SOUNDS[name]||SOUNDS.can;
+  if(kind==='tur'){[0,.35,.7].forEach((t,i)=>f(1+i*.15,t));} else f(1,0);
+}
+function vib(p){
+  try{
+    if(window.ZikirNative&&ZikirNative.vibrate){ZikirNative.vibrate(JSON.stringify(Array.isArray(p)?p:[p])); return;}
+    if(navigator.vibrate) navigator.vibrate(p);
+  }catch(e){}
+}
+/* imame ve tur sonu bildirimi */
+function doFb(mode,kind){
+  const S=cfg();
+  if(mode==='vibrate'||mode==='both') vib(kind==='tur'?VIB_TUR:VIB[S.vibPattern]);
+  if(mode==='sound'||mode==='both') playSound(S.sound,kind);
+}
+/* her zikir (tesbih boncuğu) bildirimi */
+function doTapFb(force){
+  const S=cfg(); let m=S.tapFb;
+  if(force&&m==='none') m='both';
+  if(m==='vibrate'||m==='both') vib(VIB_TAP[S.tapVibPattern]||VIB_TAP.tiny);
+  if(m==='sound'||m==='both') (SOUNDS[S.tapSound]||SOUNDS.tik)(1,0);
+}
+
+/* ---------- Küçük yardımcılar ---------- */
+let toastT=null;
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1900);
+}
+function dialog({title,text,input,buttons}){
+  return new Promise(resolve=>{
+    const ov=document.createElement('div'); ov.className='ov';
+    const box=document.createElement('div'); box.className='dlg';
+    const h=document.createElement('h3'); h.textContent=title; box.appendChild(h);
+    if(text){const p=document.createElement('p'); p.textContent=text; box.appendChild(p);}
+    let inp=null;
+    if(input){inp=document.createElement('input'); inp.className='dinp'; inp.type=input.type||'text';
+      if(input.inputmode) inp.inputMode=input.inputmode; inp.placeholder=input.placeholder||''; inp.value=input.value==null?'':input.value; box.appendChild(inp);}
+    const row=document.createElement('div'); row.className='dbtns'+(buttons.length>2?' vert':'');
+    const close=v=>{ov.classList.add('out'); setTimeout(()=>ov.remove(),180); resolve(v);};
+    buttons.forEach(b=>{const el=document.createElement('button'); el.className='dbtn'+(b.primary?' primary':''); el.textContent=b.label;
+      el.onclick=()=>close({value:b.value,input:inp?inp.value:null}); row.appendChild(el);});
+    box.appendChild(row); ov.appendChild(box);
+    ov.addEventListener('pointerdown',e=>{if(e.target===ov) close(null);});
+    $('modalRoot').appendChild(ov);
+    if(inp) setTimeout(()=>inp.focus(),60);
+  });
+}
+function dayKey(ts){const d=new Date(ts);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function fmtTime(ts){return new Date(ts).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});}
+function fmtDate(ts){return new Date(ts).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',weekday:'long'});}
+
+/* ---------- Tesbih çemberi ---------- */
+let IM=new Set(), beadEls=[], prevCur=0, arcProg=null, arcLen=0;
+function imameSet(){
+  const S=D.settings,N=S.total,s=new Set();
+  if(S.imameMode==='every'){const e=S.imameEvery; if(e>0) for(let p=e;p<N;p+=e) s.add(p);}
+  else if(S.imameMode==='custom'){S.imameCustom.forEach(p=>{if(p>0&&p<N) s.add(p);});}
+  return s;
+}
+const NS='http://www.w3.org/2000/svg';
+function buildRing(){
+  const N=D.settings.total, R=158, g=$('beadsG'), arc=$('arcG');
+  g.innerHTML=''; arc.innerHTML=''; beadEls=[]; arcProg=null; IM=imameSet();
+  if(N<=120){
+    const r=Math.max(3.2,Math.min(11,Math.PI*R/N*0.72));
+    for(let i=1;i<=N;i++){
+      const a=i/N*2*Math.PI, x=200+R*Math.sin(a), y=200-R*Math.cos(a);
+      const isI=IM.has(i), isEnd=(i===N);
+      const c=document.createElementNS(NS,'circle');
+      c.setAttribute('cx',x.toFixed(2)); c.setAttribute('cy',y.toFixed(2));
+      c.setAttribute('r',((isI||isEnd)?r*1.5:r).toFixed(2));
+      c.setAttribute('class','bead'+(isI?' imame':'')+(isEnd?' end':''));
+      g.appendChild(c); beadEls[i]=c;
+    }
+  }else{
+    const tr=document.createElementNS(NS,'circle');
+    tr.setAttribute('cx',200);tr.setAttribute('cy',200);tr.setAttribute('r',R);tr.setAttribute('class','track'); arc.appendChild(tr);
+    arcLen=2*Math.PI*R;
+    const pr=document.createElementNS(NS,'circle');
+    pr.setAttribute('cx',200);pr.setAttribute('cy',200);pr.setAttribute('r',R);pr.setAttribute('class','prog');
+    pr.setAttribute('transform','rotate(-90 200 200)');
+    pr.style.strokeDasharray=arcLen; pr.style.strokeDashoffset=arcLen; arc.appendChild(pr); arcProg=pr;
+    IM.forEach(p=>{
+      const a=p/N*2*Math.PI, x1=200+(R-14)*Math.sin(a), y1=200-(R-14)*Math.cos(a), x2=200+(R+14)*Math.sin(a), y2=200-(R+14)*Math.cos(a);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('class','tick'); arc.appendChild(l);
+    });
+  }
+}
+function setRotation(angle,instant){
+  const g=$('beadsG');
+  if(instant){g.style.transition='none'; g.style.transform=`rotate(${angle}deg)`; void g.getBoundingClientRect(); g.style.transition='';}
+  else g.style.transform=`rotate(${angle}deg)`;
+}
+
+/* ---------- Ekranı çizme ---------- */
+function infoText(){
+  const S=D.settings; let im;
+  if(S.imameMode==='none') im='İmame yok';
+  else if(S.imameMode==='every') im=S.imameEvery>0?`İmame: her ${S.imameEvery} zikirde`:'İmame yok';
+  else im=S.imameCustom.length?`İmame: ${S.imameCustom.filter(p=>p<S.total).join(', ')}. zikirde`:'İmame yok';
+  return `${im} · ${FB_LABEL[S.imameFb]}`;
+}
+function render(animate,instant){
+  const S=D.settings, st=D.state, N=S.total, c=st.count;
+  $('zName').textContent=S.name;
+  const cnt=$('cnt'); cnt.textContent=c;
+  if(animate){cnt.classList.remove('pop'); void cnt.offsetWidth; cnt.classList.add('pop');}
+  $('ofTxt').textContent='/ '+N;
+  const done=st.rounds+(c>=N?1:0);
+  $('turTxt').textContent=done;
+  if(beadEls.length){
+    for(let i=1;i<=N;i++){
+      const el=beadEls[i]; if(!el) continue;
+      el.classList.toggle('on',i<=c);
+      if(i===c){ if(prevCur!==c||animate){el.classList.remove('cur'); void el.getBoundingClientRect(); el.classList.add('cur');} }
+      else el.classList.remove('cur');
+    }
+    setRotation(-((st.rounds*N+c)/N)*360,instant);
+  }
+  if(arcProg) arcProg.style.strokeDashoffset=arcLen*(1-c/N);
+  prevCur=c;
+  $('sessTxt').textContent=st.session>0?`(${st.session})`:'';
+  $('infoLine').textContent=infoText();
+  document.querySelectorAll('#totalChips .chip').forEach(ch=>ch.classList.toggle('on',+ch.dataset.n===N));
+  updateEsmaUI();
+}
+function renderChips(){
+  const N=D.settings.total, box=$('totalChips'); box.innerHTML='';
+  const list=PRESETS.slice(); if(!PRESETS.includes(N)) list.push(N); list.sort((a,b)=>a-b);
+  list.forEach(n=>{const b=document.createElement('button'); b.className='chip'; b.dataset.n=n; b.textContent=n; box.appendChild(b);});
+  const o=document.createElement('button'); o.className='chip'; o.dataset.n='custom'; o.textContent='Özel'; box.appendChild(o);
+}
+
+/* ---------- Efektler ---------- */
+function ripple(){
+  const r=document.createElement('div'); r.className='ripple'; $('fx').appendChild(r); setTimeout(()=>r.remove(),700);
+}
+function fxColors(){
+  const cs=getComputedStyle(document.documentElement);
+  return [1,2,3,4].map(i=>(cs.getPropertyValue('--fx'+i)||'').trim()||'#e9c46a');
+}
+function burst(kind){
+  const fx=$('fx'), tur=kind==='tur', n=tur?36:16;
+  const all=fxColors(), cols=tur?all:all.slice(0,2);
+  const base=$('ringWrap').clientWidth/400;
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2, d=((tur?110:70)+Math.random()*(tur?140:70))*Math.max(base,.6);
+    const p=document.createElement('span'); p.className='p';
+    p.style.setProperty('--dx',(Math.cos(a)*d).toFixed(1)+'px'); p.style.setProperty('--dy',(Math.sin(a)*d).toFixed(1)+'px');
+    p.style.setProperty('--s',((tur?6:4)+Math.random()*5).toFixed(1)+'px'); p.style.setProperty('--c',cols[i%cols.length]);
+    fx.appendChild(p); setTimeout(()=>p.remove(),1050);
+  }
+  const s=document.createElement('div'); s.className='shock '+kind; fx.appendChild(s); setTimeout(()=>s.remove(),1050);
+  const w=$('ringWrap'); w.classList.remove('flash'); void w.offsetWidth; w.classList.add('flash');
+}
+
+/* ---------- Sayma ---------- */
+function flushSession(){
+  const st=D.state;
+  if(st.session>0){
+    D.history.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,6),ts:Date.now(),name:(D.esma.active?D.settings.name+' · '+ESMA[D.esma.idx][0]:D.settings.name),count:st.session});
+    st.session=0; st.sessionStartedAt=0; save(); return true;
+  }
+  return false;
+}
+function tap(){
+  const S=D.settings, st=D.state; let N=S.total;
+  audio();
+  if(st.count>=N){
+    if(D.esma.active){esmaGo(D.esma.idx+1,true); N=S.total;}
+    else {st.rounds++; st.count=0;}
+  }
+  if(st.session===0) st.sessionStartedAt=Date.now();
+  st.count++; st.session++;
+  const c=st.count;
+  ripple();
+  if(c===N){
+    doFb(S.turFb,'tur'); burst('tur'); toast(D.esma.active?'İsim tamamlandı ✨':'Tur tamamlandı ✨');
+    if(S.autoSave){const n=st.session; flushSession(); setTimeout(()=>toast(`Tur kaydedildi: ${n}`),1300);}
+  }else if(IM.has(c)){
+    doFb(S.imameFb,'imame'); burst('imame'); toast(`İmame · ${c}`);
+  }else{
+    doTapFb(false);
+  }
+  render(true); save();
+}
+function undo(){
+  const st=D.state, N=D.settings.total;
+  if(st.count===0){ if(st.rounds>0){st.rounds--; st.count=N; if(st.session>0) st.session--;} else {toast('Geri alınacak sayı yok'); return;} }
+  else {st.count--; if(st.session>0) st.session--;}
+  render(false); save(); vib(15);
+}
+function saveSession(){
+  const n=D.state.session;
+  if(!n){toast('Kaydedilecek zikir yok'); return;}
+  flushSession(); render(false); toast(`Geçmişe kaydedildi: ${n}`); vib(30);
+}
+async function resetAll(){
+  const st=D.state;
+  const btns=st.session>0
+    ?[{label:`Kaydet ve sıfırla (${st.session})`,value:'save',primary:true},{label:'Kaydetmeden sıfırla',value:'drop'},{label:'Vazgeç',value:'no'}]
+    :[{label:'Vazgeç',value:'no'},{label:'Sıfırla',value:'drop',primary:true}];
+  const r=await dialog({title:'Sayaç sıfırlansın mı?',text:'Tur ve sayı başa döner.',buttons:btns});
+  if(!r||r.value==='no') return;
+  if(r.value==='save') flushSession();
+  st.count=0; st.rounds=0; st.session=0; st.sessionStartedAt=0;
+  // Esmaül Hüsna modunda sıfırlama, sayaçla birlikte isim sırasını da ilk isme döndürür.
+  if(D.esma.active){
+    D.esma.idx=0;
+    D.settings.total=D.esma.counts[0]||99;
+    buildRing();
+    prevCur=0;
+  }
+  save(); renderChips(); render(false,true); toast(D.esma.active?'Sıfırlandı · İlk isim: '+ESMA[0][0]:'Sıfırlandı');
+}
+function applyTotalValues(n){
+  const S=D.settings, st=D.state;
+  S.total=n; st.count=0; st.rounds=0;
+  let msg=`${n}'lük tesbih`;
+  if(RECOMMENDED[n]!==undefined){
+    if(RECOMMENDED[n]>0){S.imameMode='every'; S.imameEvery=RECOMMENDED[n]; msg+=` · imame her ${RECOMMENDED[n]}'de`;}
+    else {S.imameMode='none'; msg+=' · imame yok';}
+  }
+  return msg;
+}
+async function setTotal(n){
+  const S=D.settings, st=D.state;
+  if(n===S.total) return;
+  if(st.count>0){
+    const r=await dialog({title:'Tesbih boyu değişsin mi?',text:`Bu turdaki ${st.count} sayı sıfırlanır. Kayıtlı geçmiş silinmez.`,buttons:[{label:'Vazgeç',value:'no'},{label:'Değiştir',value:'yes',primary:true}]});
+    if(!r||r.value!=='yes') return;
+  }
+  const msg=applyTotalValues(n);
+  save(); renderChips(); buildRing(); prevCur=0; render(false,true); toast(msg);
+}
+async function customTotal(){
+  const r=await dialog({title:'Kaç zikirlik tesbih?',text:'1 ile 9999 arasında bir sayı yazın.',input:{type:'number',inputmode:'numeric',placeholder:'Örn. 40',value:''},buttons:[{label:'Vazgeç',value:'no'},{label:'Tamam',value:'ok',primary:true}]});
+  if(!r||r.value!=='ok') return;
+  const n=parseInt(r.input,10);
+  if(!(n>=1&&n<=9999)){toast('1-9999 arası bir sayı girin'); return;}
+  setTotal(n);
+}
+/* ---------- Zikir listesi (ekle / düzenle / sil / seç) ---------- */
+const zTr=t=>t.toLocaleLowerCase('tr');
+function zTaken(name,exceptId){return D.zikirs.some(z=>z.id!==exceptId&&zTr(z.name)===zTr(name));}
+function formDialog({title,name,count,imameMode,imameEvery,imameCustom,check}){
+  return new Promise(resolve=>{
+    const ov=document.createElement('div'); ov.className='ov';
+    const box=document.createElement('div'); box.className='dlg';
+    box.innerHTML=`<h3>${esc(title)}</h3>
+      <div class="zlbl">Zikrin adı</div>
+      <input class="dinp" id="fName" type="text" maxlength="40" placeholder="Örn. Hasbünallah" value="${esc(name||'')}" style="margin-bottom:10px">
+      <div class="zlbl">Kaç defa? (boş bırakabilirsiniz)</div>
+      <input class="dinp" id="fCount" type="number" inputmode="numeric" min="1" max="9999" placeholder="Örn. 33" value="${count?esc(count):''}" style="margin-bottom:6px">
+      <div class="hint">Sayı yazarsanız bu zikri seçtiğinizde tesbih o boyda olur (örneğin 33'luk tesbih). Boş bırakırsanız mevcut tesbih boyu korunur.</div>
+      <div class="zlbl" style="margin-top:12px">İmame (durak) düzeni</div>
+      <div class="segs" style="margin:7px 0 10px">
+        <button type="button" class="seg${(imameMode||'every')==='none'?' on':''}" data-imode="none">Yok</button>
+        <button type="button" class="seg${(imameMode||'every')==='every'?' on':''}" data-imode="every">Aralıklı</button>
+        <button type="button" class="seg${(imameMode||'every')==='custom'?' on':''}" data-imode="custom">Özel yerler</button>
+      </div>
+      <div id="fImameEveryWrap" style="display:${(imameMode||'every')==='every'?'block':'none'}">
+        <div class="zlbl">Her kaç sayıda bir imame olsun?</div>
+        <input class="dinp" id="fImameEvery" type="number" inputmode="numeric" min="1" max="9999" value="${esc(imameEvery||33)}" style="margin-bottom:8px">
+      </div>
+      <div id="fImameCustomWrap" style="display:${(imameMode||'every')==='custom'?'block':'none'}">
+        <div class="zlbl">Durak yerleri (virgülle ayırın)</div>
+        <input class="dinp" id="fImameCustom" type="text" inputmode="text" placeholder="Örn. 25, 50, 75" value="${esc((imameCustom||[]).join(', '))}" style="margin-bottom:8px">
+        <div class="hint">Durak yerleri tesbih sayısından küçük olmalıdır.</div>
+      </div>
+      <div class="zerr" id="fErr"></div>
+      <div class="dbtns"><button class="dbtn" id="fNo">Vazgeç</button><button class="dbtn primary" id="fOk">Kaydet</button></div>`;
+    ov.appendChild(box);
+    const close=v=>{ov.classList.add('out'); setTimeout(()=>ov.remove(),180); resolve(v);};
+    const err=m=>{box.querySelector('#fErr').textContent=m;};
+    let selectedImame=imameMode||'every';
+    box.querySelectorAll('[data-imode]').forEach(b=>b.onclick=()=>{
+      selectedImame=b.dataset.imode;
+      box.querySelectorAll('[data-imode]').forEach(x=>x.classList.toggle('on',x===b));
+      box.querySelector('#fImameEveryWrap').style.display=selectedImame==='every'?'block':'none';
+      box.querySelector('#fImameCustomWrap').style.display=selectedImame==='custom'?'block':'none';
+    });
+    box.querySelector('#fNo').onclick=()=>close(null);
+    box.querySelector('#fOk').onclick=()=>{
+      const n=box.querySelector('#fName').value.trim().slice(0,40);
+      const raw=box.querySelector('#fCount').value.trim();
+      if(!n){err('Lütfen zikrin adını yazın.'); return;}
+      let c=null;
+      if(raw!==''){c=parseInt(raw,10); if(!(c>=1&&c<=9999)){err('Sayı 1 ile 9999 arasında olmalı.'); return;}}
+      const m=check?check(n):''; if(m){err(m); return;}
+      const everyRaw=box.querySelector('#fImameEvery').value.trim();
+      const every=everyRaw===''?0:parseInt(everyRaw,10);
+      if(selectedImame==='every'&&!(every>=1&&every<=9999)){err('İmame aralığı 1 ile 9999 arasında olmalı.');return;}
+      const custom=box.querySelector('#fImameCustom').value.split(/[^0-9]+/).map(x=>parseInt(x,10)).filter(x=>x>0&&x<(c||9999)).sort((a,b)=>a-b).filter((x,i,a)=>a.indexOf(x)===i);
+      close({name:n,count:c,imameMode:selectedImame,imameEvery:every||33,imameCustom:custom});
+    };
+    ov.addEventListener('pointerdown',e=>{if(e.target===ov) close(null);});
+    $('modalRoot').appendChild(ov);
+    setTimeout(()=>box.querySelector('#fName').focus(),60);
+  });
+}
+async function applyZikir(z){
+  const S=D.settings, st=D.state, E=D.esma, isE=z.type==='esma';
+  const needTotal0=!isE&&!!z.count&&z.count!==S.total;
+  if((isE&&E.active)||(!isE&&z.name===S.name&&!needTotal0)){toast('Bu zikir zaten seçili'); return;}
+  if(st.count>0||st.session>0){
+    const r=await dialog({title:'Zikir değişsin mi?',text:`Şimdiye kadarki ${st.session} zikir geçmişe kaydedilir ve sayaç sıfırlanır.`,buttons:[{label:'Vazgeç',value:'no'},{label:'Değiştir',value:'yes',primary:true}]});
+    if(!r||r.value!=='yes') return;
+    flushSession();
+  }
+  if(isE){
+    E.prevTotal=S.total; E.active=true; S.name=z.name; S.total=E.counts[E.idx]; st.count=0; st.rounds=0;
+    save(); renderChips(); buildRing(); prevCur=0; render(false,true); toast(`${z.name} · ${ESMA[E.idx][0]}`); return;
+  }
+  if(E.active){E.active=false; if(!z.count&&E.prevTotal) S.total=E.prevTotal;}
+  const needTotal=!!z.count&&z.count!==S.total;
+  S.name=z.name; st.count=0; st.rounds=0;
+  if(z.imameMode){S.imameMode=z.imameMode;S.imameEvery=z.imameEvery||33;S.imameCustom=Array.isArray(z.imameCustom)?z.imameCustom.slice():[];}
+  let msg=z.name;
+  if(needTotal) msg+=' · '+applyTotalValues(z.count);
+  save(); renderChips(); buildRing(); prevCur=0; render(false,true); toast(msg);
+}
+function zikirPicker(){
+  const ov=document.createElement('div'); ov.className='ov';
+  const box=document.createElement('div'); box.className='dlg zl'; ov.appendChild(box);
+  const close=()=>{ov.classList.add('out'); setTimeout(()=>ov.remove(),180);};
+  let zFilter='';
+  const draw=()=>{
+    const filtered=D.zikirs.filter(z=>zTr(z.name).includes(zTr(zFilter)));
+    const rows=filtered.map(z=>`<div class="zrow${z.name===D.settings.name?' on':''}">
+      <button class="zbtn zmove" data-move="${esc(z.id)}" data-dir="-1" aria-label="Yukarı taşı" ${D.zikirs.indexOf(z)===0?'disabled':''}>↑</button>
+      <button class="zpick" data-pick="${esc(z.id)}"><b>${esc(z.name)}</b><span>${z.type==='esma'?'99 isim + Allah · her isme ayrı sayı':(z.count?z.count+' defa':'Sayı belirtilmedi')}${z.imameMode?` · ${z.imameMode==='none'?'İmame yok':z.imameMode==='every'?'Her '+z.imameEvery+' sayıda':'Durak: '+(z.imameCustom||[]).join(', ')}`:''}</span></button>
+      <button class="zbtn" data-edit="${esc(z.id)}" aria-label="Düzenle" title="Düzenle">✎</button>
+      ${z.type==='esma'?'':`<button class="zbtn" data-copy="${esc(z.id)}" aria-label="Kopyala" title="Kopyala">＋</button><button class="zbtn" data-del="${esc(z.id)}" aria-label="Sil" title="Sil">✕</button>`}
+      <button class="zbtn zmove" data-move="${esc(z.id)}" data-dir="1" aria-label="Aşağı taşı" ${D.zikirs.indexOf(z)===D.zikirs.length-1?'disabled':''}>↓</button></div>`).join('');
+    box.innerHTML=`<h3>Zikir seç</h3>
+      <input class="dinp" id="zSearch" type="search" placeholder="Zikirlerde ara…" value="${esc(zFilter)}" aria-label="Kayıtlı zikirlerde ara" style="margin:0 0 10px">
+      <div class="zlist">${rows||'<div class="empty" style="padding:20px 6px">Eşleşen zikir bulunamadı. Aramayı değiştirin veya yeni zikir ekleyin.</div>'}</div>
+      <button class="dbtn primary zadd" data-add="1">+ Yeni zikir ekle</button>
+      <button class="dbtn zclose" data-close="1">Kapat</button>`;
+  };
+  box.addEventListener('input',e=>{
+    if(e.target.id==='zSearch'){
+      const pos=e.target.selectionStart; zFilter=e.target.value; draw();
+      const inp=box.querySelector('#zSearch'); inp.focus(); try{inp.setSelectionRange(pos,pos);}catch(_){ }
+    }
+  });
+  box.addEventListener('click',async e=>{
+    const t=e.target.closest('button'); if(!t) return;
+    const d=t.dataset;
+    if(d.close!==undefined){close(); return;}
+    if(d.move){
+      const from=D.zikirs.findIndex(x=>x.id===d.move), to=from+Number(d.dir);
+      if(from>=0&&to>=0&&to<D.zikirs.length){const [item]=D.zikirs.splice(from,1);D.zikirs.splice(to,0,item);save();draw();}
+      return;
+    }
+    if(d.add!==undefined){
+      const r=await formDialog({title:'Yeni zikir',imameMode:D.settings.imameMode,imameEvery:D.settings.imameEvery,imameCustom:D.settings.imameCustom,check:n=>zTaken(n)?'Bu isimde bir zikir zaten var.':''});
+      if(r){D.zikirs.push({id:newId(),name:r.name,count:r.count,imameMode:r.imameMode,imameEvery:r.imameEvery,imameCustom:r.imameCustom}); save(); draw(); toast('Zikir listeye eklendi');}
+      return;
+    }
+    const id=d.pick||d.edit||d.del||d.copy, z=D.zikirs.find(x=>x.id===id); if(!z) return;
+    if(d.copy){
+      let base=(z.name+' (kopya)').slice(0,40), candidate=base, n=2;
+      while(zTaken(candidate)){candidate=(z.name.slice(0,Math.max(1,34-String(n).length))+' (kopya '+n+')').slice(0,40);n++;}
+      D.zikirs.splice(D.zikirs.indexOf(z)+1,0,{...clone(z),id:newId(),name:candidate}); save(); draw(); toast('Zikir kopyalandı'); return;
+    }
+    if(d.pick){close(); applyZikir(z); return;}
+    if(d.edit){
+      if(z.type==='esma'){esmaDialog(); return;}
+      const r=await formDialog({title:'Zikri düzenle',name:z.name,count:z.count,imameMode:z.imameMode||D.settings.imameMode,imameEvery:z.imameEvery||D.settings.imameEvery,imameCustom:z.imameCustom||D.settings.imameCustom,check:n=>zTaken(n,z.id)?'Bu isimde bir zikir zaten var.':''});
+      if(!r) return;
+      const wasActive=z.name===D.settings.name;
+      z.name=r.name; z.count=r.count; z.imameMode=r.imameMode; z.imameEvery=r.imameEvery; z.imameCustom=r.imameCustom;
+      if(wasActive){
+        D.settings.name=z.name;
+        D.settings.imameMode=z.imameMode;
+        D.settings.imameEvery=z.imameEvery;
+        D.settings.imameCustom=z.imameCustom.slice();
+      }
+      save(); draw(); render(false);
+      if(wasActive){
+        if(z.count&&z.count!==D.settings.total) setTotal(z.count);
+        else { buildRing(); render(false,true); }
+      }
+      toast('Zikir ve imame durakları kaydedildi ✓');
+      return;
+    }
+    if(d.del){
+      const r=await dialog({title:`"${z.name}" silinsin mi?`,text:'Zikir listeden kalıcı olarak kaldırılır. Geçmiş kayıtlarınız silinmez.',buttons:[{label:'Vazgeç',value:'no'},{label:'Sil',value:'yes',primary:true}]});
+      if(r&&r.value==='yes'){D.zikirs=D.zikirs.filter(x=>x.id!==z.id); save(); draw(); toast('Silindi');}
+    }
+  });
+  ov.addEventListener('pointerdown',e=>{if(e.target===ov) close();});
+  draw();
+  $('modalRoot').appendChild(ov);
+}
+
+/* ---------- Esmaül Hüsna ---------- */
+function updateEsmaUI(){
+  const E=D.esma, on=!!E.active;
+  document.documentElement.classList.toggle('esma',on);
+  if(!on) return;
+  const n=ESMA[E.idx], ar=$('esAr');
+  ar.textContent=n[1]; ar.style.fontSize=n[1].length>14?'1.45rem':'';
+  $('esTr').textContent=`${E.idx+1}/100 · ${n[0]}`;
+}
+function esmaGo(i,quiet){
+  const E=D.esma, S=D.settings, st=D.state;
+  i=((i%100)+100)%100;
+  flushSession();
+  E.idx=i; S.total=E.counts[i]; st.count=0; st.rounds=0;
+  save(); buildRing(); prevCur=0; render(false,true);
+  if(!quiet) vib(15);
+}
+function esmaSyncTotal(){
+  const E=D.esma, S=D.settings, st=D.state;
+  if(E.active&&S.total!==E.counts[E.idx]){
+    S.total=E.counts[E.idx]; if(st.count>S.total) st.count=S.total;
+    buildRing(); prevCur=0; render(false,true);
+  }
+  save();
+}
+function esmaDialog(){
+  const E=D.esma;
+  const ov=document.createElement('div'); ov.className='ov';
+  const box=document.createElement('div'); box.className='dlg zl'; ov.appendChild(box);
+  const close=()=>{ov.classList.add('out'); setTimeout(()=>ov.remove(),180);};
+  box.innerHTML=`<h3>Esmaül Hüsna</h3>
+    <div class="hint" style="margin:0 0 10px">Her ismin yanındaki kutuya o isim için kaç defa okuyacağınızı yazın. Bir isme dokunursanız sayaç o isme geçer. Bir isim tamamlanınca sonraki dokunuşta sıradaki isme geçilir.</div>
+    <div class="eall"><input class="dinp" id="eAll" type="number" inputmode="numeric" min="1" max="9999" placeholder="Hepsi için sayı" style="margin:0"><button class="dbtn" id="eAllBtn">Hepsine uygula</button></div>
+    <div class="zlist" id="eList"></div>
+    <button class="dbtn primary zclose" data-close="1">Tamam</button>`;
+  const list=box.querySelector('#eList');
+  const draw=()=>{
+    const y=list.scrollTop;
+    list.innerHTML=ESMA.map((n,i)=>`<div class="zrow${E.active&&i===E.idx?' on':''}"><button class="zpick" data-go="${i}"><b class="esar2" lang="ar" dir="rtl">${n[1]}</b><span>${i+1}. ${esc(n[0])}</span></button><input class="ecnt" type="number" inputmode="numeric" min="1" max="9999" data-i="${i}" value="${E.counts[i]}" aria-label="${esc(n[0])} tekrar sayısı"></div>`).join('');
+    list.scrollTop=y;
+  };
+  box.addEventListener('click',async e=>{
+    const t=e.target.closest('button'); if(!t) return;
+    if(t.dataset.close!==undefined){close(); return;}
+    if(t.dataset.go!==undefined){
+      const i=+t.dataset.go; close();
+      if(E.active) esmaGo(i);
+      else {E.idx=i; const z=D.zikirs.find(x=>x.type==='esma'); if(z) applyZikir(z);}
+      return;
+    }
+    if(t.id==='eAllBtn'){
+      const n=parseInt(box.querySelector('#eAll').value,10);
+      if(!(n>=1&&n<=9999)){toast('1-9999 arası bir sayı girin'); return;}
+      const r=await dialog({title:'Hepsine uygulansın mı?',text:`Tüm 100 ismin tekrar sayısı ${n} olacak.`,buttons:[{label:'Vazgeç',value:'no'},{label:'Uygula',value:'yes',primary:true}]});
+      if(!r||r.value!=='yes') return;
+      E.counts=E.counts.map(()=>n); esmaSyncTotal(); draw(); toast(`Hepsi ${n} oldu`);
+    }
+  });
+  box.addEventListener('change',e=>{
+    const t=e.target; if(!t.classList.contains('ecnt')) return;
+    const i=+t.dataset.i, n=parseInt(t.value,10);
+    if(!(n>=1&&n<=9999)){t.value=E.counts[i]; toast('1-9999 arası bir sayı girin'); return;}
+    E.counts[i]=n; t.value=n; esmaSyncTotal();
+  });
+  ov.addEventListener('pointerdown',e=>{if(e.target===ov) close();});
+  draw();
+  $('modalRoot').appendChild(ov);
+}
+
+/* ---------- Sekmeler ---------- */
+const TABS=['zikir','istatistik','gecmis','ayar'];
+let curTab='zikir';
+function showTab(name){
+  if(name==='ayar'&&!DR) DR=clone(D.settings);              // ayarlara girerken taslak oluştur
+  if(curTab==='ayar'&&name!=='ayar'){DR=null; applyTheme(D.settings.theme);} // çıkarken taslağı bırak, kayıtlı temaya dön
+  curTab=name;
+  TABS.forEach(t=>$('tab-'+t).classList.toggle('active',t===name));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===name));
+  $('ind').style.transform=`translateX(${TABS.indexOf(name)*100}%)`;
+  if(name==='gecmis') renderHistory();
+  if(name==='istatistik') renderStats();
+  if(name==='ayar'){renderSettings(); $('tab-ayar').scrollTop=0;}
+}
+function isDirty(){return !!DR&&JSON.stringify(DR)!==JSON.stringify(D.settings);}
+async function gotoTab(name){
+  if(curTab==='ayar'&&name!=='ayar'){
+    flushInputs();
+    if(isDirty()){
+      const r=await dialog({title:'Ayarlar kaydedilsin mi?',text:'Yaptığınız değişiklikler henüz kaydedilmedi.',
+        buttons:[{label:'Kaydet',value:'save',primary:true},{label:'Kaydetmeden çık',value:'drop'},{label:'Burada kal',value:'stay'}]});
+      if(!r||r.value==='stay') return;
+      if(r.value==='save'){commitSettings(name); return;}
+    }
+  }
+  showTab(name);
+}
+
+/* ---------- Günlük hedef ve istatistikler ---------- */
+function renderStats(){
+  const body=$('statsBody'); if(!body) return;
+  const now=new Date(), start=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  const todaySaved=D.history.filter(h=>h.ts>=start).reduce((a,h)=>a+(Number(h.count)||0),0);
+  const activeToday=D.state.session>0 && (!D.state.sessionStartedAt || D.state.sessionStartedAt>=start) ? D.state.session : 0;
+  const today=todaySaved+activeToday;
+  const target=Math.max(1,Number(D.settings.dailyTarget)||500), pct=Math.min(100,Math.round(today/target*100));
+  const week=[]; let weekTotal=0;
+  for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i), ts=d.getTime(), end=ts+86400000; const sum=D.history.filter(h=>h.ts>=ts&&h.ts<end).reduce((a,h)=>a+(Number(h.count)||0),0)+(i===0?activeToday:0);week.push({d,sum});weekTotal+=sum;}
+  const max=Math.max(1,...week.map(x=>x.sum));
+  const all=D.history.reduce((a,h)=>a+(Number(h.count)||0),0)+D.state.session;
+  const best=Math.max(0,...week.map(x=>x.sum));
+  body.innerHTML=`
+    <div class="card"><h3>Günlük zikir hedefi</h3>
+      <div class="stats-grid"><div class="stat-card"><b>${today.toLocaleString('tr-TR')}</b><span>Bugün çekilen</span></div><div class="stat-card"><b>${target.toLocaleString('tr-TR')}</b><span>Günlük hedef</span></div></div>
+      <div class="goalbar" role="progressbar" aria-label="Günlük hedef ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div>
+      <div class="hint">${pct>=100?'Maşallah! Günlük hedef tamamlandı.':`Hedefin %${pct} kadarı tamamlandı. ${Math.max(0,target-today).toLocaleString('tr-TR')} zikir kaldı.`}</div>
+      <label class="row" for="dailyTargetInput"><span>Hedefi değiştir</span></label>
+      <div class="target-edit"><input class="inp" id="dailyTargetInput" type="number" min="1" max="999999" inputmode="numeric" value="${target}" aria-label="Günlük zikir hedefi"><button class="testbtn" id="saveDailyTarget">Hedefi kaydet</button></div>
+    </div>
+    <div class="card"><h3>Son 7 gün</h3><div class="stats-grid"><div class="stat-card"><b>${weekTotal.toLocaleString('tr-TR')}</b><span>7 günlük toplam</span></div><div class="stat-card"><b>${best.toLocaleString('tr-TR')}</b><span>En verimli gün</span></div></div>
+      <div class="week-bars" aria-label="Son yedi gün zikir grafiği">${week.map(x=>{const h=x.d.toLocaleDateString('tr-TR',{weekday:'short'}).replace('.','');const height=x.sum?Math.max(7,Math.round(x.sum/max*92)):3;return `<div class="weekday" title="${esc(fmtDate(x.d.getTime()))}: ${x.sum}"><b>${x.sum?x.sum.toLocaleString('tr-TR'):''}</b><i style="height:${height}px;opacity:${x.sum?1:.35}"></i><span>${esc(h)}</span></div>`;}).join('')}</div>
+    </div>
+    <div class="stats-grid"><div class="stat-card"><b>${all.toLocaleString('tr-TR')}</b><span>Toplam zikir (geçmiş + oturum)</span></div><div class="stat-card"><b>${D.history.length}</b><span>Kayıtlı oturum</span></div></div>
+    <div class="hint">İstatistikler, geçmişe kaydedilen oturumlar ve şu anki oturum üzerinden hesaplanır. Uygulamayı kapatmadan önce de sayaç otomatik saklanır.</div>`;
+}
+$('statsBody').addEventListener('click',e=>{
+  if(e.target.id!=='saveDailyTarget') return;
+  const input=$('dailyTargetInput'), n=parseInt(input.value,10);
+  if(!Number.isFinite(n)||n<1||n>999999){toast('Hedef 1 ile 999999 arasında olmalı');return;}
+  D.settings.dailyTarget=n; save(); renderStats(); toast('Günlük hedef kaydedildi ✓');
+});
+
+/* ---------- Geçmiş ---------- */
+function renderHistory(){
+  const H=D.history.slice().sort((a,b)=>b.ts-a.ts), body=$('histBody');
+  const d0=new Date(); d0.setHours(0,0,0,0);
+  const todayStart=d0.getTime(), weekStart=todayStart-6*864e5;
+  let sToday=0,sWeek=0,sAll=0;
+  H.forEach(h=>{sAll+=h.count; if(h.ts>=todayStart) sToday+=h.count; if(h.ts>=weekStart) sWeek+=h.count;});
+  let html=`<div class="sums"><div class="sum"><b>${sToday}</b><span>Bugün</span></div><div class="sum"><b>${sWeek}</b><span>Son 7 gün</span></div><div class="sum"><b>${sAll}</b><span>Toplam</span></div></div>`;
+  if(!H.length){
+    html+=`<div class="empty">Henüz kayıt yok.<br>Zikir ekranında <b>Kaydet</b> düğmesine basınca<br>zikirleriniz burada tarih ve saatle görünür.</div>`;
+  }else{
+    const groups=[], map={};
+    H.forEach(h=>{const k=dayKey(h.ts); if(!map[k]){map[k]={key:k,ts:h.ts,items:[],sum:0}; groups.push(map[k]);} map[k].items.push(h); map[k].sum+=h.count;});
+    const tk=dayKey(Date.now()), yk=dayKey(Date.now()-864e5);
+    groups.forEach(g=>{
+      const label=g.key===tk?'Bugün':g.key===yk?'Dün':fmtDate(g.ts);
+      html+=`<div class="day"><div class="dayh"><b>${esc(label)}</b><span>${(g.key===tk||g.key===yk)?esc(fmtDate(g.ts))+' · ':''}toplam ${g.sum}</span></div>`;
+      g.items.forEach(h=>{html+=`<div class="hrow"><div class="ht">${fmtTime(h.ts)}</div><div class="hn">${esc(h.name)}</div><div class="hc">${h.count}</div><button class="hdel" data-del="${esc(h.id)}" aria-label="Sil" title="Sil">✕</button></div>`;});
+      html+='</div>';
+    });
+    html+=`<button class="dangerbtn" id="clearHist">Tüm geçmişi sil</button>`;
+  }
+  body.innerHTML=html;
+}
+$('histBody').addEventListener('click',async e=>{
+  const del=e.target.closest('[data-del]');
+  if(del){
+    const r=await dialog({title:'Kayıt silinsin mi?',buttons:[{label:'Vazgeç',value:'no'},{label:'Sil',value:'yes',primary:true}]});
+    if(r&&r.value==='yes'){D.history=D.history.filter(h=>h.id!==del.dataset.del); save(); renderHistory();}
+    return;
+  }
+  if(e.target.id==='clearHist'){
+    const r=await dialog({title:'Tüm geçmiş silinsin mi?',text:'Bu işlem geri alınamaz.',buttons:[{label:'Vazgeç',value:'no'},{label:'Hepsini sil',value:'yes',primary:true}]});
+    if(r&&r.value==='yes'){D.history=[]; save(); renderHistory();}
+  }
+});
+
+/* ---------- Ayarlar (taslak üzerinde çalışır) ---------- */
+function segs(key,map,cur){
+  return `<div class="segs">`+Object.keys(map).map(v=>`<button class="seg${String(cur)===v?' on':''}" data-k="${key}" data-v="${v}">${esc(map[v])}</button>`).join('')+`</div>`;
+}
+function sw(key,label,val,hint){
+  return `<div class="row"><label for="sw_${key}">${label}</label><span class="sw"><input type="checkbox" id="sw_${key}" data-k="${key}" ${val?'checked':''}><i></i></span></div>`+(hint?`<div class="hint">${hint}</div>`:'');
+}
+function themeCards(cur){
+  return `<div class="themes">`+THEMES.map(t=>{
+    const dots=[8,26,44,62,80].map((l,i)=>{
+      const col=i===2?t.c[2]:(i===1||i===3)?t.c[1]:t.c[0], s=i===2?16:12;
+      return `<i style="left:${l}%;width:${s}px;height:${s}px;background:${col};bottom:${i===2?8:10}px"></i>`;
+    }).join('');
+    return `<button class="theme${cur===t.id?' on':''}" data-k="theme" data-v="${t.id}"><div class="pv" style="background:${t.bg}">${t.moon?'<b class="pm"></b>':''}${dots}</div><div class="tn"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span></div></button>`;
+  }).join('')+`</div>`;
+}
+function renderSettings(){
+  if(!DR) DR=clone(D.settings);
+  const S=DR;
+  const vibNote=(navigator.vibrate||window.ZikirNative)?'':'<div class="hint">⚠ Bu tarayıcı titreşimi desteklemiyor. Android\'de Chrome ile açın.</div>';
+  $('setBody').innerHTML=`
+  <div class="card"><h3>Tema</h3>
+    ${themeCards(S.theme)}
+    <div class="hint">Seçtiğiniz tema hemen önizlenir, Kaydet'e basınca kalıcı olur.</div>
+  </div>
+  <div class="card"><h3>İmame (duraklar)</h3>
+    ${segs('imameMode',{none:'Yok',every:'Aralıklı',custom:'Özel yerler'},S.imameMode)}
+    ${S.imameMode==='every'?`<div class="row"><label>Her kaç zikirde bir?</label></div><input class="inp" type="number" inputmode="numeric" min="1" data-k="imameEvery" value="${S.imameEvery}">
+      <div class="hint">Örnek: 33 yazarsanız 100'lük tesbihte 33, 66 ve 99'da imame olur.</div>`:''}
+    ${S.imameMode==='custom'?`<div class="row"><label>İmame yerleri (virgülle)</label></div><input class="inp" type="text" inputmode="text" data-k="imameCustom" value="${esc(S.imameCustom.join(', '))}" placeholder="Örn. 25, 50, 75">
+      <div class="hint">Tesbihin sonuna gelince "tur tamamlandı" bildirimi ayrıca çalar.</div>`:''}
+  </div>
+  <div class="card"><h3>İmamede ne olsun?</h3>
+    ${segs('imameFb',FB_LABEL,S.imameFb)}
+    <div class="row"><label>Ses seçimi</label></div>
+    ${segs('sound',SOUND_LABEL,S.sound)}
+    <div class="row"><label>Titreşim şekli</label></div>
+    ${segs('vibPattern',VIB_LABEL,S.vibPattern)}
+    ${vibNote}
+    <div class="row"><label>Ses seviyesi</label></div>
+    <input type="range" min="0.1" max="1" step="0.05" value="${S.volume}" data-k="volume">
+    <button class="testbtn" id="testImame">▶ İmame bildirimini dene</button>
+  </div>
+  <div class="card"><h3>Tur bitince ne olsun?</h3>
+    ${segs('turFb',FB_LABEL,S.turFb)}
+    <div class="hint">Tur sonunda ses üç kez, titreşim uzun ve belirgin olur.</div>
+    <button class="testbtn" id="testTur">▶ Tur sonunu dene</button>
+  </div>
+  <div class="card"><h3>Her zikirde (tesbih boncuğu)</h3>
+    ${segs('tapFb',FB_LABEL,S.tapFb)}
+    <div class="row"><label>Titreşim şekli</label></div>
+    ${segs('tapVibPattern',TAPVIB_LABEL,S.tapVibPattern)}
+    <div class="row"><label>Ses seçimi</label></div>
+    ${segs('tapSound',TAPSOUND_LABEL,S.tapSound)}
+    <div class="hint">Her dokunuşta, boncuk ilerlerken seçtiğiniz titreşim ve/veya ses çalar. Ses seviyesi yukarıdaki ayarı kullanır.</div>
+    <button class="testbtn" id="testTap">▶ Boncuk bildirimini dene</button>
+  </div>
+  <div class="card"><h3>Uygulama</h3>
+    <div class="hint" style="margin-top:0">Uygulamayı desteklenen tarayıcılarda ana ekrana yükleyebilir, simgesinden açabilir ve ilk yüklemeden sonra çevrimdışı kullanabilirsiniz. Yükleme için HTTPS üzerinden açılması gerekir.</div>
+    <button class="testbtn" id="installApp">＋ Ana ekrana yükle</button>
+  </div>
+  <div class="card"><h3>Genel</h3>
+    ${sw('keepAwake','Ekran açık kalsın',S.keepAwake,'Zikir çekerken ekran kararmaz. Pili biraz daha çok kullanır.')}
+    ${sw('autoSave','Tur bitince geçmişe otomatik kaydet',S.autoSave,'Kapalıyken kayıt için zikir ekranındaki Kaydet düğmesini kullanın.')}
+    ${sw('largeMode','Kolay kullanım modu',S.largeMode,'Yazıları ve düğmeleri büyütür; özellikle büyük ekran yazısı isteyen kullanıcılar için.')}
+    <div class="row"><label for="setDailyTarget">Günlük zikir hedefi</label></div><input class="inp" id="setDailyTarget" type="number" min="1" max="999999" inputmode="numeric" data-k="dailyTarget" value="${S.dailyTarget||500}">
+    <div class="hint">İstatistikler sekmesinden günlük ilerlemenizi ve son 7 günün grafiğini görebilirsiniz.</div>
+  </div>
+  <div class="card"><h3>Yedekleme ve veri aktarımı</h3>
+    <div class="hint" style="margin-top:0">Zikir listesi, imame ayarları, sayaç, Esma sayıları, temanız ve geçmişiniz tek dosyada saklanır. Telefon değiştirirken veya verilerinizi korumak için yedek alın.</div>
+    <button class="testbtn" id="exportBackup">⬇ Yedeği dışa aktar</button>
+    <button class="testbtn" id="importBackup">⬆ Yedekten geri yükle</button>
+    <input id="backupFile" type="file" accept="application/json,.json" style="display:none">
+    <div class="hint">İçe aktarma mevcut verilerin yerine geçer. Önce mevcut verilerinizin yedeğini almanız önerilir.</div>
+  </div>
+  <div class="hint" style="text-align:center;margin:8px 0 0">Ahmet Zikirmatik v9 · Sayaç ve geçmiş telefonda otomatik saklanır; PWA olarak yüklendiğinde çevrimdışı da kullanılabilir.</div>
+  <div class="savebar"><button class="savebtn" id="saveSettings">✓ Kaydet</button></div>`;
+}
+function rerenderSettings(){
+  const tab=$('tab-ayar'), y=tab.scrollTop;
+  renderSettings(); tab.scrollTop=y;
+}
+let wakeLock=null;
+async function applyWake(){
+  try{
+    if(window.ZikirNative&&ZikirNative.keepAwake){ZikirNative.keepAwake(!!D.settings.keepAwake); return;}
+    if(D.settings.keepAwake&&'wakeLock' in navigator&&document.visibilityState==='visible'){ if(!wakeLock) {wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{wakeLock=null;});} }
+    else if(wakeLock){await wakeLock.release(); wakeLock=null;}
+  }catch(e){wakeLock=null;}
+}
+document.addEventListener('visibilitychange',applyWake);
+
+/* taslağa yazar (kalıcı kayıt Kaydet düğmesinde) */
+function applySetting(k,v){
+  if(!DR) return;
+  const S=DR;
+  switch(k){
+    case 'imameEvery':{const n=parseInt(v,10); S.imameEvery=(n>=1&&n<=9999)?n:S.imameEvery; break;}
+    case 'imameCustom':{S.imameCustom=String(v).split(/[^0-9]+/).map(x=>parseInt(x,10)).filter(x=>x>0).sort((a,b)=>a-b).filter((x,i,a)=>a.indexOf(x)===i); break;}
+    case 'volume':S.volume=Math.min(1,Math.max(0.1,parseFloat(v)||0.7)); break;
+    case 'keepAwake': case 'autoSave': case 'largeMode': S[k]=!!v; break;
+    case 'dailyTarget': {const n=parseInt(v,10); if(n>=1&&n<=999999) S.dailyTarget=n; break;}
+    default: S[k]=v;
+  }
+  if(k==='theme') applyTheme(v);
+  if(k==='largeMode') document.documentElement.classList.toggle('large-mode',!!S.largeMode);
+}
+function flushInputs(){
+  if(!DR) return;
+  document.querySelectorAll('#setBody input[data-k]').forEach(el=>{
+    if(el.type==='checkbox'||el.type==='range') return;
+    applySetting(el.dataset.k,el.value);
+  });
+}
+function commitSettings(target){
+  flushInputs();
+  const S=D.settings, keep={total:S.total,name:S.name};
+  Object.assign(S,DR,keep);
+  DR=null;
+  save(); applyTheme(S.theme); applyLargeMode(); applyWake();
+  buildRing(); prevCur=0; render(false,true);
+  showTab(target||'zikir');
+  toast('Ayarlar kaydedildi ✓'); vib(30);
+}
+function exportBackup(){
+  try{
+    const payload={...clone(D),settings:clone(DR||D.settings),backupVersion:1,exportedAt:new Date().toISOString(),app:'Ahmet Zikirmatik'};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob), a=document.createElement('a');
+    a.href=url; a.download='zikirmatik-yedek-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+    toast('Yedek dosyası hazırlandı');
+  }catch(e){toast('Yedek oluşturulamadı');}
+}
+async function importBackupFile(file){
+  if(!file) return;
+  try{
+    const raw=await file.text(), obj=JSON.parse(raw);
+    if(!obj||typeof obj!=='object'||!obj.settings||!Array.isArray(obj.history)||!obj.state){throw new Error('format');}
+    const r=await dialog({title:'Yedek geri yüklensin mi?',text:'Mevcut zikir listeniz, ayarlarınız ve geçmişiniz seçilen yedekteki verilerle değiştirilecek. Bu işlemden önce mevcut verilerinizi yedekleyin.',buttons:[{label:'Vazgeç',value:'no'},{label:'Geri yükle',value:'yes',primary:true}]});
+    if(!r||r.value!=='yes') return;
+    localStorage.setItem(KEY,JSON.stringify(obj));
+    D=load(); DR=null; applyTheme(D.settings.theme); applyLargeMode(); buildRing(); renderChips(); render(false,true); applyWake();
+    if(curTab==='ayar') renderSettings(); if(curTab==='gecmis') renderHistory();
+    toast('Yedek başarıyla geri yüklendi ✓');
+  }catch(e){toast('Yedek okunamadı. Geçerli bir Zikirmatik JSON dosyası seçin.');}
+}
+$('setBody').addEventListener('click',e=>{
+  if(e.target.closest('#saveSettings')){commitSettings('zikir'); return;}
+  if(e.target.closest('#exportBackup')){flushInputs(); exportBackup(); return;}
+  if(e.target.closest('#importBackup')){$('backupFile').click(); return;}
+  const b=e.target.closest('button[data-k]');
+  if(b){
+    const k=b.dataset.k, v=b.dataset.v;
+    applySetting(k,v);
+    rerenderSettings();
+    if(k==='sound') playSound(v,'imame');
+    else if(k==='vibPattern') vib(VIB[v]);
+    else if(k==='imameFb') doFb(v,'imame');
+    else if(k==='turFb') doFb(v,'tur');
+    else if(k==='tapFb') doTapFb(false);
+    else if(k==='tapVibPattern') vib(VIB_TAP[v]);
+    else if(k==='tapSound') (SOUNDS[v]||SOUNDS.tik)(1,0);
+    return;
+  }
+  const id=e.target.id;
+  if(id==='testImame') doFb(DR.imameFb==='none'?'both':DR.imameFb,'imame');
+  else if(id==='testTur') doFb(DR.turFb==='none'?'both':DR.turFb,'tur');
+  else if(id==='testTap') doTapFb(true);
+});
+$('setBody').addEventListener('change',e=>{
+  if(e.target.id==='backupFile'){const f=e.target.files&&e.target.files[0]; importBackupFile(f); e.target.value=''; return;}
+
+  const t=e.target; if(!t.dataset||!t.dataset.k) return;
+  const k=t.dataset.k;
+  if(t.type==='checkbox') applySetting(k,t.checked);
+  else if(t.type==='range'){applySetting(k,t.value); playSound(DR.sound,'imame');}
+  else{ // yazı kutuları: sayfayı yeniden çizmeden temizlenmiş değeri geri yaz
+    applySetting(k,t.value);
+    if(k==='imameEvery') t.value=DR.imameEvery;
+    if(k==='imameCustom') t.value=DR.imameCustom.join(', ');
+  }
+});
+$('setBody').addEventListener('input',e=>{if(e.target.type==='range'&&DR) DR.volume=parseFloat(e.target.value);});
+
+/* ---------- Olaylar ---------- */
+const tapBtn=$('tapBtn');
+tapBtn.addEventListener('pointerdown',e=>{e.preventDefault(); tapBtn.classList.add('down'); tap();});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>tapBtn.addEventListener(ev,()=>tapBtn.classList.remove('down')));
+tapBtn.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault(); tap();}});
+tapBtn.addEventListener('contextmenu',e=>e.preventDefault());
+$('undoBtn').onclick=undo; $('saveBtn').onclick=saveSession; $('resetBtn').onclick=resetAll; $('nameBtn').onclick=zikirPicker;
+$('esPrev').onclick=()=>esmaGo(D.esma.idx-1); $('esNext').onclick=()=>esmaGo(D.esma.idx+1); $('esMid').onclick=esmaDialog;
+$('infoLine').onclick=()=>gotoTab('ayar');
+$('totalChips').addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c) return;
+  if(c.dataset.n==='custom') customTotal(); else setTotal(parseInt(c.dataset.n,10));
+});
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>gotoTab(b.dataset.tab)));
+document.addEventListener('contextmenu',e=>e.preventDefault());
+
+/* arka plan: yıldızlar ve (Ay Işığı temasında görünen) ateş böcekleri */
+(()=>{
+  const s=$('stars');
+  for(let i=0;i<26;i++){
+    const d=document.createElement('i'); d.style.left=Math.random()*100+'%'; d.style.top=Math.random()*100+'%';
+    d.style.animationDelay=(Math.random()*4).toFixed(2)+'s'; d.style.animationDuration=(3+Math.random()*4).toFixed(2)+'s'; s.appendChild(d);
+  }
+  for(let i=0;i<12;i++){
+    const f=document.createElement('span'); f.className='ff';
+    f.style.left=(5+Math.random()*90).toFixed(1)+'%'; f.style.top=(38+Math.random()*57).toFixed(1)+'%';
+    f.style.setProperty('--x',((Math.random()-.5)*90).toFixed(0)+'px'); f.style.setProperty('--y',((Math.random()-.5)*70).toFixed(0)+'px');
+    f.style.setProperty('--d',(7+Math.random()*7).toFixed(1)+'s'); f.style.animationDelay=(Math.random()*8).toFixed(1)+'s'; s.appendChild(f);
+  }
+})();
+
+/* ---------- Geri tuşu ---------- */
+/* Önce açık pencereyi kapatır, sonra Geçmiş/Ayarlar'dan Zikir sekmesine döner. Zikir sekmesindeyse false döner (uygulama kapanır). */
+function zikirBack(){
+  const ovs=document.querySelectorAll('#modalRoot .ov:not(.out)');
+  if(ovs.length){ovs[ovs.length-1].dispatchEvent(new Event('pointerdown',{bubbles:true})); return true;}
+  if(curTab!=='zikir'){gotoTab('zikir'); return true;}
+  return false;
+}
+window.zikirBack=zikirBack;
+if(!window.ZikirNative){ // tarayıcıda: geri tuşu için geçmiş kaydı hilesi (APK'da Android'in kendi geri tuşu kullanılır)
+  try{
+    history.pushState({z:1},'');
+    window.addEventListener('popstate',()=>{ if(zikirBack()) history.pushState({z:1},''); else history.back(); });
+  }catch(e){}
+}
+
+/* başlangıç */
+applyTheme(D.settings.theme);
+renderChips(); buildRing(); render(false,true); applyWake();
+})();
+</script>
+<script>
+(()=>{
+  let installPrompt=null;
+  window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;});
+  window.addEventListener('appinstalled',()=>{installPrompt=null;});
+  document.addEventListener('click',async event=>{
+    const btn=event.target.closest('#installApp');
+    if(!btn) return;
+    if(installPrompt){
+      installPrompt.prompt();
+      try{await installPrompt.userChoice;}catch(_){}
+      installPrompt=null;
+    }else{
+      const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+      const msg=isStandalone?'Uygulama zaten ana ekrandan açılıyor.':'Tarayıcı menüsünü açıp “Ana ekrana ekle” veya “Uygulamayı yükle” seçeneğini kullanın. Bu özellik için uygulamayı HTTPS adresinden açmanız gerekir.';
+      const toast=document.getElementById('toast'); if(toast){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),4200);}else alert(msg);
+    }
+  });
+  if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  }
+})();
+</script>
+</body>
+</html>
